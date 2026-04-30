@@ -1034,6 +1034,103 @@ flowchart TD
 
 👉 “Environment variables are used to store sensitive and configurable data outside the code. In Node.js, we use dotenv to load them and access via process.env.”
 
+
+
+# Q15: What are the differences between synchronous and asynchronous functions in JavaScript? Provide examples.
+
+## ✅ Simple Answer
+
+- **Synchronous (Sync)** → runs **line by line**, waits for each task  
+- **Asynchronous (Async)** → does **not wait**, continues execution  
+
+---
+
+## 🧠 Simple Thinking
+
+👉 Sync = “Wait first, then next”  
+👉 Async = “Start task, do other work, handle result later”  
+
+---
+
+## 🔴 Synchronous Example
+
+```js
+const fs = require('fs')
+
+console.log("Start")
+
+const data = fs.readFileSync('file.txt', 'utf-8')
+console.log(data)
+
+console.log("End")
+````
+
+### Output:
+
+```text
+Start
+(file data)
+End
+```
+
+👉 It waits → blocking ❌
+
+---
+
+## 🟢 Asynchronous Example
+
+```js id="nk1j6l"
+const fs = require('fs')
+
+console.log("Start")
+
+fs.readFile('file.txt', 'utf-8', (err, data) => {
+  console.log(data)
+})
+
+console.log("End")
+```
+
+### Output:
+
+```text
+Start
+End
+(file data)
+```
+
+👉 It does not wait → non-blocking ✅
+
+---
+
+## 📊 Flow Comparison
+
+```mermaid id="syncasync1"
+flowchart TD
+    A[Start] --> B[Sync Task]
+    B --> C[Wait]
+    C --> D[Next Task]
+
+    A --> E[Async Task]
+    E --> F[Continue Work]
+    F --> G[Callback Later]
+```
+
+---
+
+## 🚀 Key Differences
+
+* Sync blocks execution
+* Async allows parallel work
+* Async uses callbacks, promises, async/await
+* Async is faster for real-world apps
+
+---
+
+## 🎯 Interview Line
+
+👉 “Synchronous functions execute line by line and block execution, while asynchronous functions do not wait for operations to complete and allow the program to continue, making them more efficient.”
+
 ---
 
 ```
