@@ -951,3 +951,90 @@ flowchart TD
 ```
 
 
+ 
+# Q14: Explain how you would use environment variables in a Node.js application. Why are they important?
+
+## ✅ Simple Answer
+
+**Environment variables** are used to store **sensitive or configurable data** outside your code.
+
+👉 Example: DB URL, API keys, PORT
+
+---
+
+## 🧠 Simple Thinking
+
+👉 Don’t hardcode secrets in code ❌  
+👉 Store them in `.env` file ✅  
+👉 Access using `process.env`  
+
+---
+
+## 🧪 How to Use
+
+### 1️⃣ Install dotenv
+```bash
+npm install dotenv
+````
+
+---
+
+### 2️⃣ Create `.env` file
+
+```env
+PORT=3000
+DB_URL=mongodb://127.0.0.1:27017/mydb
+SECRET_KEY=mysecret
+```
+
+---
+
+### 3️⃣ Use in code
+
+```js
+require('dotenv').config()
+
+const express = require('express')
+const app = express()
+
+const PORT = process.env.PORT
+
+app.get('/', (req, res) => {
+  res.send('Server running')
+})
+
+app.listen(PORT, () => {
+  console.log(`Server on ${PORT}`)
+})
+```
+
+---
+
+## 📊 Flow
+
+```mermaid id="envflow"
+flowchart TD
+    A[.env File] --> B[dotenv loads variables]
+    B --> C[process.env]
+    C --> D[Used in App]
+```
+
+---
+
+## 🚀 Why It’s Important
+
+* Keeps **secrets safe** 🔐
+* Easy to change config without editing code
+* Different values for dev / production
+* Makes app more secure and flexible
+
+---
+
+## 🎯 Interview Line
+
+👉 “Environment variables are used to store sensitive and configurable data outside the code. In Node.js, we use dotenv to load them and access via process.env.”
+
+---
+
+```
+```
