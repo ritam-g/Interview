@@ -670,7 +670,284 @@ flowchart TD
 
 👉 “Routing in Express is used to match URLs with functions. It supports static routes, dynamic parameters using req.params, and query strings using req.query.”
 
+
+# Q11: Describe how to connect an Express application to a MongoDB database using Mongoose
+
+## ✅ Simple Answer
+
+👉 We use **Mongoose** to connect Express with MongoDB.
+
+👉 It helps us:
+- Connect to database  
+- Create schema (structure)  
+- Perform CRUD operations  
+
+---
+
+## 🧠 Simple Steps
+
+1️⃣ Install mongoose  
+2️⃣ Connect to MongoDB  
+3️⃣ Create schema & model  
+4️⃣ Use it in routes  
+
+---
+
+## 🧪 Code Example (Easy to Remember)
+
+```js
+const express = require('express')
+const mongoose = require('mongoose')
+
+const app = express()
+
+// Connect to MongoDB
+mongoose.connect('mongodb://127.0.0.1:27017/mydb')
+.then(() => console.log('DB Connected'))
+.catch(err => console.log(err))
+
+// Schema
+const userSchema = new mongoose.Schema({
+  name: String,
+  age: Number
+})
+
+// Model
+const User = mongoose.model('User', userSchema)
+
+// Route
+app.get('/add', async (req, res) => {
+  const user = new User({ name: 'Ritam', age: 21 })
+  await user.save()
+  res.send('User Added')
+})
+
+app.listen(3000)
+````
+
+---
+
+## 📊 Flow
+
+```mermaid id="mongo1"
+flowchart TD
+    A[Express App] --> B[Mongoose]
+    B --> C[MongoDB Database]
+    C --> D[Store / Fetch Data]
+    D --> A
+```
+
+---
+
+## 🚀 Key Points
+
+* Mongoose is an **ODM (Object Data Modeling)** library
+* `connect()` → connects DB
+* Schema → structure of data
+* Model → used to interact with DB
+
+---
+
+## 🎯 Interview Line
+
+👉 “We connect Express to MongoDB using Mongoose by establishing a connection, defining a schema and model, and then performing database operations inside routes.”
+
+
+# Q12: How would you implement authentication in a Node.js and Express application?
+
+## ✅ Simple Answer
+
+Authentication means:
+👉 **Checking if user is valid or not**
+
+In Express, we commonly use:
+- **JWT (JSON Web Token)**  
+- **Sessions (cookie-based)**  
+
+---
+
+## 🧠 Simple Thinking
+
+👉 User logs in → server verifies → gives token/session  
+👉 User sends it again → server checks → allows access  
+
+---
+
+## 🔥 Most Common: JWT Authentication
+
+### 🧪 Example Code (Easy)
+
+```js
+const express = require('express')
+const jwt = require('jsonwebtoken')
+
+const app = express()
+app.use(express.json())
+
+const SECRET = "mysecret"
+
+// Login route
+app.post('/login', (req, res) => {
+  const { username } = req.body
+
+  // create token
+  const token = jwt.sign({ username }, SECRET)
+
+  res.json({ token })
+})
+
+// Protected route
+app.get('/profile', (req, res) => {
+  const token = req.headers.authorization
+
+  try {
+    const decoded = jwt.verify(token, SECRET)
+    res.send(`Welcome ${decoded.username}`)
+  } catch {
+    res.status(401).send('Unauthorized')
+  }
+})
+
+app.listen(3000)
+````
+
+---
+
+## 📊 JWT Flow
+
+```mermaid id="authjwt"
+flowchart TD
+    A[User Login] --> B[Server Verify]
+    B --> C[Generate Token]
+    C --> D[Send Token to User]
+    D --> E[User Sends Token]
+    E --> F[Verify Token]
+    F --> G[Access Granted]
+```
+
+---
+
+## 🔐 Other Strategy: Session-Based
+
+* Server stores session
+* Client stores session ID in cookie
+* Used in traditional apps
+
+---
+
+## 🚀 Key Points
+
+* JWT → stateless, widely used in APIs
+* Sessions → stateful, uses cookies
+* Always hash passwords (bcrypt)
+* Use middleware to protect routes
+
+---
+
+## 🎯 Interview Line
+
+👉 “Authentication in Express can be implemented using JWT or sessions. JWT is commonly used where a token is generated after login and verified on each request to protect routes.”
+
+# Q13: What is CORS, and why is it important? How can you enable it in Express?
+
+## ✅ Simple Answer
+
+**CORS (Cross-Origin Resource Sharing)** is a security feature in browsers.
+
+👉 It controls **which frontend (origin)** can access your backend API.
+
+---
+
+## 🧠 Simple Thinking
+
+👉 Different origin = different:
+- domain  
+- port  
+- protocol  
+
+Example:
+- Frontend → `http://localhost:3000`  
+- Backend → `http://localhost:5000`  
+
+👉 Browser blocks this by default ❌  
+👉 CORS allows it ✅  
+
+---
+
+## ⚙️ Why CORS is Important
+
+- Prevents unauthorized access  
+- Protects APIs from unknown domains  
+- Allows safe communication between frontend & backend  
+
+---
+
+## 🧪 How to Enable CORS in Express
+
+### 1️⃣ Install cors package
+```bash
+npm install cors
+````
+
+---
+
+### 2️⃣ Use it in app
+
+```js
+const express = require('express')
+const cors = require('cors')
+
+const app = express()
+
+app.use(cors()) // enable for all
+
+app.get('/', (req, res) => {
+  res.send('CORS Enabled')
+})
+
+app.listen(3000)
+```
+
+---
+
+## 🔒 Custom CORS (Allow specific origin)
+
+```js id="corscustom"
+app.use(cors({
+  origin: 'http://localhost:3000'
+}))
+```
+
+---
+
+## 📊 Flow
+
+```mermaid id="corsflow"
+flowchart TD
+    A[Frontend Request] --> B[Browser Checks Origin]
+    B --> C{Allowed?}
+    C -->|Yes| D[Request Sent to Server]
+    C -->|No| E[Blocked by Browser]
+```
+
+---
+
+## 🚀 Key Points
+
+* CORS is handled by **browser**, not server
+* Server sends headers to allow access
+* `cors()` middleware makes it easy
+* Can restrict to specific domains
+
+---
+
+## 🎯 Interview Line
+
+👉 “CORS is a browser security mechanism that restricts cross-origin requests. In Express, it can be enabled using the cors middleware to allow controlled access to APIs.”
+
 ---
 
 ```
 ```
+
+
