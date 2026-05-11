@@ -1133,5 +1133,340 @@ flowchart TD
 
 ---
 
+
+# Q16: How would you implement session management in Express applications? Discuss using sessions and cookies.
+
+## ✅ Simple Answer
+
+Session management is used to **identify and remember logged-in users**.
+
+Nowadays, most Express applications use **JWT token authentication** instead of traditional sessions.
+
+---
+
+## 🧠 Easy Understanding
+
+👉 User logs in  
+👉 Server creates token with user info  
+👉 Frontend stores token  
+👉 Frontend sends token in every request  
+👉 Server verifies token and identifies user  
+
+---
+
+## 🧪 Simple JWT Example
+
+### Install package
+```bash
+npm install jsonwebtoken
+````
+
+---
+
+### Login & Generate Token
+
+```js
+const express = require('express')
+const jwt = require('jsonwebtoken')
+
+const app = express()
+app.use(express.json())
+
+const SECRET = "mysecret"
+
+// Login
+app.post('/login', (req, res) => {
+
+  const user = {
+    id: 101,
+    name: "Ritam"
+  }
+
+  // create token
+  const token = jwt.sign(user, SECRET)
+
+  res.json({ token })
+})
+
+app.listen(3000)
+```
+
+---
+
+### Verify Token
+
+```js id="bffivk"
+app.get('/profile', (req, res) => {
+
+  const token = req.headers.authorization
+
+  try {
+    const decoded = jwt.verify(token, SECRET)
+
+    res.send(decoded)
+
+  } catch {
+    res.status(401).send("Invalid Token")
+  }
+
+})
+```
+
+---
+
+## 📊 JWT Authentication Flow
+
+```mermaid id="jwtauthflow"
+flowchart TD
+    A[User Login] --> B[Server Creates Token]
+    B --> C[Frontend Stores Token]
+    C --> D[Send Token in Request]
+    D --> E[Server Verifies Token]
+    E --> F[Access Granted]
+```
+
+---
+
+## 🍪 What About Cookies?
+
+👉 Cookies store small data in browser
+👉 Traditional sessions use cookies to store sessionId
+
+But in JWT:
+
+* Token is usually stored in frontend/localStorage/cookies
+* Server verifies token directly
+
+---
+
+## 🚀 Key Points
+
+* JWT is mostly used in modern MERN apps
+* Token contains user info like userId
+* Stateless authentication
+* Used to protect routes
+
+---
+
+## 🎯 Interview Line
+
+👉 “Modern Express applications commonly use JWT authentication where a token containing user information is generated after login and verified on each request to identify the user.”
+
+---
+
+
+# Q17: Explain the concept of Promises and async/await in JavaScript. How do they help with asynchronous programming?
+
+## ✅ Simple Answer
+
+Promises and async/await are used to handle **asynchronous operations** in JavaScript.
+
+👉 They help write async code in a cleaner and easier way.
+
+---
+
+## 🧠 Easy Understanding
+
+### 🔹 Promise
+
+A Promise is an object that represents:
+- pending
+- resolved
+- rejected
+
+👉 It means:
+“Result will come later”
+
+---
+
+## 🧪 Promise Example
+
+```js
+const promise = new Promise((resolve, reject) => {
+
+  let success = true
+
+  if (success) {
+    resolve("Data received")
+  } else {
+    reject("Error occurred")
+  }
+
+})
+
+promise
+  .then(data => console.log(data))
+  .catch(err => console.log(err))
+````
+
+---
+
+## 🔹 async/await
+
+👉 async/await is a cleaner way to work with promises
+
+👉 `await` pauses only the current function until promise completes
+
+---
+
+## 🧪 async/await Example
+
+```js id="38g70u"
+function getData() {
+
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve("Data received")
+    }, 2000)
+  })
+
+}
+
+async function fetchData() {
+
+  const data = await getData()
+
+  console.log(data)
+
+}
+
+fetchData()
+```
+
+---
+
+## 📊 Async Flow
+
+```mermaid id="promiseflow1"
+flowchart TD
+    A[Start Async Task] --> B[Promise Created]
+    B --> C[await waits]
+    C --> D[Task Completes]
+    D --> E[Continue Execution]
+```
+
+---
+
+## 🚀 Why They Help
+
+* Avoid callback hell
+* Cleaner and readable code
+* Easier error handling with try-catch
+* Better async programming
+
+---
+
+## 🎯 Key Difference
+
+| Promise                  | async/await          |
+| ------------------------ | -------------------- |
+| Uses `.then()`           | Uses `await`         |
+| More chaining            | Cleaner syntax       |
+| Harder to read sometimes | Easier to understand |
+
+---
+
+## 🎯 Interview Line
+
+👉 “Promises represent future values of asynchronous operations, and async/await provides a cleaner way to handle promises, making asynchronous code easier to read and manage.”
+
+---
+
+# Q18: Describe how to implement file uploads in an Express application. What middleware might you use?
+
+## ✅ Simple Answer
+
+File upload in Express means:
+👉 Receiving files from client and storing them on server.
+
+👉 We commonly use **Multer middleware** for handling file uploads.
+
+---
+
+## 🧠 Easy Understanding
+
+👉 User selects file  
+👉 File sent to Express server  
+👉 Multer processes file  
+👉 File stored in folder/server  
+
+---
+
+## 🧪 Install Multer
+
+```bash
+npm install multer
+````
+
+---
+
+## 🧪 Simple File Upload Example
+
+```js id="upl1"
+const express = require('express')
+const multer = require('multer')
+
+const app = express()
+
+// Storage config
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/')
+  },
+
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname)
+  }
+})
+
+const upload = multer({ storage })
+
+// Upload route
+app.post('/upload', upload.single('image'), (req, res) => {
+  res.send('File Uploaded')
+})
+
+app.listen(3000)
+```
+
+---
+
+## 📊 File Upload Flow
+
+```mermaid id="uploadflow1"
+flowchart TD
+    A[User Selects File] --> B[Send Request]
+    B --> C[Multer Middleware]
+    C --> D[Store File]
+    D --> E[Send Response]
+```
+
+---
+
+## 🚀 Important Multer Methods
+
+* `upload.single()` → upload one file
+* `upload.array()` → multiple files
+* `upload.fields()` → multiple named fields
+
+---
+
+## 🚀 Key Points
+
+* Multer is the most common upload middleware
+* Handles multipart/form-data
+* Can store files locally or cloud
+* Used for images, PDFs, videos, etc.
+
+---
+
+## 🎯 Interview Line
+
+👉 “File uploads in Express are commonly handled using Multer middleware, which processes multipart/form-data and stores uploaded files on the server.”
+
+---
+
 ```
 ```
+
+
