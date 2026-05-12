@@ -1744,7 +1744,568 @@ flowchart TD
 
 👉 “Node.js applications can be protected from SQL Injection and XSS by validating inputs, using parameterized queries, sanitizing HTML content, and applying security middleware like Helmet.”
 
+# Q21: Explain what RESTful APIs are and their principles. How would you design a RESTful API using Express?
+
+## ✅ Simple Answer
+
+A RESTful API is an API that follows REST principles to allow communication between client and server using HTTP methods.
+
+👉 REST = Representational State Transfer
+
 ---
+
+## 🧠 Easy Understanding
+
+👉 Client sends request  
+👉 Server processes it  
+👉 Server sends JSON response  
+
+Example:
+- Get users
+- Create user
+- Update user
+- Delete user
+
+---
+
+# 🔹 Main HTTP Methods
+
+| Method | Purpose |
+|---|---|
+| GET | Read data |
+| POST | Create data |
+| PUT | Update data |
+| DELETE | Remove data |
+
+---
+
+# 🔹 REST Principles
+
+- Use proper HTTP methods  
+- Use clean URLs  
+- Stateless communication  
+- Data mostly in JSON format  
+
+---
+
+## 🧪 REST API Example in Express
+
+
+const express = require('express')
+
+const app = express()
+
+app.use(express.json())
+
+// GET users
+app.get('/users', (req, res) => {
+  res.send('Get All Users')
+})
+
+// POST user
+app.post('/users', (req, res) => {
+  res.send('Create User')
+})
+
+// PUT user
+app.put('/users/:id', (req, res) => {
+  res.send(`Update User ${req.params.id}`)
+})
+
+// DELETE user
+app.delete('/users/:id', (req, res) => {
+  res.send(`Delete User ${req.params.id}`)
+})
+
+app.listen(3000)
+
+---
+
+# Q22: Describe how to use Socket.IO with an Express application for real-time communication. Provide an example scenario.
+
+## ✅ Simple Answer
+
+Socket.IO is a library used for **real-time communication** between client and server.
+
+👉 It allows instant data transfer without refreshing the page.
+
+---
+
+## 🧠 Easy Understanding
+
+Normal HTTP:
+👉 Request → Response → Connection ends
+
+Socket.IO:
+👉 Connection stays active  
+👉 Both client and server can send data anytime
+
+---
+
+## 🔥 Real Example
+
+- Chat application 💬  
+- Live notifications 🔔  
+- Live stock price 📈  
+- Multiplayer games 🎮  
+
+---
+
+## 🧪 Install Socket.IO
+
+```bash
+npm install socket.io
+````
+
+---
+
+## 🧪 Simple Express + Socket.IO Example
+
+```js
+const express = require('express')
+const http = require('http')
+const { Server } = require('socket.io')
+
+const app = express()
+
+// Create HTTP server
+const server = http.createServer(app)
+
+// Connect Socket.IO
+const io = new Server(server)
+
+// Socket connection
+io.on('connection', (socket) => {
+
+  console.log('User Connected')
+
+  // receive message
+  socket.on('message', (data) => {
+    console.log(data)
+
+    // send message to all users
+    io.emit('message', data)
+  })
+
+})
+
+// Start server
+server.listen(3000)
+```
+
+---
+
+## 📊 Socket.IO Flow
+
+```mermaid id="socketflow1"
+flowchart TD
+    A[Client Connects] --> B[Socket.IO Connection]
+    B --> C[Send Message]
+    C --> D[Server Receives]
+    D --> E[Broadcast to Clients]
+```
+
+---
+
+## 🚀 Key Points
+
+* Used for real-time apps
+* Works on WebSockets
+* Instant communication
+* Event-based system (`on`, `emit`)
+
+---
+
+## 🎯 Interview Line
+
+👉 “Socket.IO enables real-time bidirectional communication between client and server. It is commonly used in chat apps, live notifications, and multiplayer applications.”
+
+---
+
+# Q23: What are the differences between Monolithic and Microservices architecture? How does Node.js fit into each?
+
+## ✅ Simple Answer
+
+### 🔹 Monolithic Architecture
+👉 Entire application is built as **one single project**
+
+Example:
+- Authentication
+- Products
+- Payments
+
+👉 Everything inside one codebase
+
+---
+
+### 🔹 Microservices Architecture
+👉 Application is divided into **small independent services**
+
+Example:
+- Auth Service
+- Product Service
+- Payment Service
+
+👉 Each service works independently
+
+---
+
+## 🧠 Easy Understanding
+
+### 🏢 Monolithic
+👉 One big building
+
+### 🧩 Microservices
+👉 Many small buildings connected together
+
+---
+
+## 📊 Monolithic Architecture
+
+```mermaid id="mono1"
+flowchart TD
+    A[Single Application]
+    A --> B[Auth Module]
+    A --> C[Product Module]
+    A --> D[Payment Module]
+````
+
+---
+
+## 📊 Microservices Architecture
+
+```mermaid id="micro1"
+flowchart TD
+    A[API Gateway]
+    A --> B[Auth Service]
+    A --> C[Product Service]
+    A --> D[Payment Service]
+```
+
+---
+
+# 🔥 Main Differences
+
+| Monolithic               | Microservices            |
+| ------------------------ | ------------------------ |
+| Single codebase          | Multiple services        |
+| Easy to start            | More scalable            |
+| Hard to scale large apps | Easy independent scaling |
+| One deployment           | Separate deployments     |
+| Tightly connected        | Loosely connected        |
+
+---
+
+# ⚙️ How Node.js Fits
+
+## 🔹 In Monolithic Apps
+
+👉 Node.js runs the whole backend in one server
+
+Example:
+
+* Small projects
+* Beginner applications
+
+---
+
+## 🔹 In Microservices
+
+👉 Node.js is great because:
+
+* Fast
+* Lightweight
+* Handles APIs efficiently
+* Good for communication between services
+
+Example:
+
+* Separate Node.js services for auth, users, payments
+
+---
+
+## 🚀 Why Node.js is Good for Microservices
+
+* Non-blocking architecture
+* Fast API handling
+* Easy service communication
+* Lightweight runtime
+
+---
+
+## 🎯 Interview Line
+
+👉 “Monolithic architecture keeps the entire application in one codebase, while microservices split the application into independent services. Node.js works well in both, especially in microservices due to its lightweight and non-blocking nature.”
+
+---
+
+```
+```
+
+
+# Q24: How would you set up a development and production environment for a Node.js application? Discuss best practices.
+
+## ✅ Simple Answer
+
+Development and production environments are separated to keep the application secure, optimized, and easy to manage.
+
+---
+
+## 🧠 Easy Understanding
+
+### 🔹 Development Environment
+👉 Used while coding
+
+Features:
+- Debugging
+- Auto restart
+- Testing
+
+Tools:
+- nodemon
+- local database
+- .env.dev
+
+---
+
+### 🔹 Production Environment
+👉 Real live server used by users
+
+Features:
+- Optimized performance
+- Security
+- Logging
+- Stable deployment
+
+Tools:
+- PM2
+- Nginx
+- Cloud server
+
+---
+
+## 📊 Environment Flow
+
+```mermaid id="envsetup1"
+flowchart TD
+    A[Development] --> B[Testing]
+    B --> C[Production Deployment]
+    C --> D[Live Users]
+````
+
+---
+
+# ⚙️ Development Setup
+
+## 🧪 Install nodemon
+
+```bash
+npm install nodemon --save-dev
+```
+
+---
+
+## 🧪 package.json scripts
+
+```json
+{
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  }
+}
+```
+
+---
+
+# ⚙️ Production Setup
+
+## 🧪 Use Environment Variables
+
+```env id="9q3yds"
+PORT=5000
+DB_URL=mydatabaseurl
+JWT_SECRET=mysecret
+```
+
+---
+
+## 🧪 Use PM2 Process Manager
+
+```bash id="4jtm90"
+npm install pm2 -g
+```
+
+```bash id="a7ohx8"
+pm2 start server.js
+```
+
+---
+
+# 🚀 Best Practices
+
+* Use `.env` for secrets
+* Never hardcode passwords
+* Separate dev and production configs
+* Use logging and monitoring
+* Use HTTPS in production
+* Validate all inputs
+* Use process manager like PM2
+
+---
+
+## 📊 Production Best Practice Flow
+
+```mermaid id="bestpractice1"
+flowchart TD
+    A[Environment Variables] --> B[Secure App]
+    B --> C[PM2 / Process Manager]
+    C --> D[Production Server]
+```
+
+---
+
+## 🎯 Interview Line
+
+👉 “Development environment is used for coding and testing, while production is optimized for real users. Best practices include using environment variables, process managers like PM2, proper security, and separate configurations.”
+
+---
+
+
+# Q25: Discuss how load balancing works with Node.js applications. What techniques can you use to scale your app?
+
+## ✅ Simple Answer
+
+Load balancing means:
+👉 Distributing traffic across multiple servers or processes to handle more users efficiently.
+
+---
+
+## 🧠 Easy Understanding
+
+👉 If only one server handles all users:
+- server becomes slow ❌
+- app may crash ❌
+
+👉 So traffic is divided between multiple servers ✅
+
+---
+
+## 📊 Load Balancing Flow
+
+```mermaid id="loadbalance1"
+flowchart TD
+    A[Users Requests] --> B[Load Balancer]
+    B --> C[Node Server 1]
+    B --> D[Node Server 2]
+    B --> E[Node Server 3]
+````
+
+---
+
+# 🔥 Scaling Techniques in Node.js
+
+## 1️⃣ Cluster Module
+
+👉 Runs multiple Node.js processes using CPU cores
+
+```js
+const cluster = require('cluster')
+```
+
+👉 Helps use multi-core systems
+
+---
+
+## 2️⃣ PM2 Clustering
+
+👉 PM2 can automatically create multiple instances
+
+```bash id="kffrse"
+pm2 start server.js -i max
+```
+
+👉 `max` = use all CPU cores
+
+---
+
+## 3️⃣ Reverse Proxy (Nginx)
+
+👉 Nginx distributes traffic between servers
+
+Example:
+
+* Server 1
+* Server 2
+* Server 3
+
+---
+
+## 4️⃣ Microservices Architecture
+
+👉 Split app into small services
+
+Example:
+
+* Auth service
+* Payment service
+* Product service
+
+---
+
+## 5️⃣ Horizontal Scaling
+
+👉 Add more servers
+
+Example:
+
+```text id="7ay6s8"
+1 server → 5 servers
+```
+
+---
+
+## 📊 Scaling Flow
+
+```mermaid id="scalingflow1"
+flowchart TD
+    A[High Traffic] --> B[Multiple Node Instances]
+    B --> C[Faster Response]
+    C --> D[Better Scalability]
+```
+
+---
+
+## 🚀 Why Node.js Needs Scaling
+
+👉 Node.js is single-threaded
+
+So:
+
+* one process uses one CPU core
+* clustering/load balancing improves performance
+
+---
+
+## 🚀 Key Points
+
+* Load balancer distributes requests
+* PM2 and cluster improve scalability
+* Nginx commonly used in production
+* Horizontal scaling handles more traffic
+
+---
+
+## 🎯 Interview Line
+
+👉 “Load balancing distributes incoming traffic across multiple Node.js instances to improve performance and availability. Common scaling techniques include clustering, PM2, Nginx load balancing, and microservices architecture.”
+
+---
+
+```
+```
+
+
 
 
 
