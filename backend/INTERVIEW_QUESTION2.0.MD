@@ -460,7 +460,7 @@ src/
 
 ## ✅ Simple Answer
 
-API Gateway is the single entry point for all client requests.
+In a microservices architecture, an **API Gateway** is =a single entry point that sits between a client (like a mobile app or website) and the backend services
 
 ---
 
@@ -699,7 +699,7 @@ const postSchema = new mongoose.Schema({
 
 ---
 
-# Q16: Explain Docker in Backend Development
+# Q16: Explain Docker in Backend Development NOT DONE YET
 
 ## ✅ Simple Answer
 
