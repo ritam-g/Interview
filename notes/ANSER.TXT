@@ -1,0 +1,222 @@
+1.Aggregation Pipeline in MongoDB is used to process data step by step. It works like a pipeline where data goes through different stages, and each stage does a specific task.
+
+We use it for:
+
+* filtering data
+* grouping data
+* sorting data
+* calculating values
+* joining collections
+
+For example, in a shopping app, we can use aggregation to find total sales or top-selling products.
+
+Some common stages are:
+
+1. $match → filters data
+2. $group → groups data and performs calculations
+3. $sort → sorts data
+4. $project → selects specific fields
+5. $limit → limits the results
+6. $lookup → joins another collection
+
+In simple words, aggregation pipeline helps us analyze and transform data easily inside MongoDB.
+
+
+
+2. Indexing in MongoDB is used to make data searching faster. Without an index, MongoDB checks every document in the collection to find data, which takes more time.
+
+An index works like a book index. Instead of reading the whole book, we directly find the page number using the index.
+
+For example, if we search users by email many times, we can create an index on the email field. Then MongoDB can find the user much faster.
+
+Compound index means an index created on multiple fields together.
+
+Example:
+
+```js
+{ name: 1, age: 1 }
+```
+
+This index helps when searching or sorting using both name and age fields together.
+
+In simple words:
+
+* Single index → works on one field
+* Compound index → works on multiple fields
+
+3.What’s the difference between find(), findOne(), and aggregate()?
+
+find() is used to get multiple documents from a collection.
+
+Example:
+
+```js id="wqdvye"
+User.find({})
+```
+
+It returns all matching documents in an array.
+
+---
+
+findOne() is used to get only one document.
+
+Example:
+
+```js id="v4m1uv"
+User.findOne({ email: "test@gmail.com" })
+```
+
+It returns the first matching document.
+
+---
+
+aggregate() is used for data processing and analysis. It works with stages like filtering, grouping, sorting, and calculations.
+
+Example:
+
+```js id="7w6q4r"
+User.aggregate([
+  { $match: { age: { $gt: 18 } } },
+  { $group: { _id: "$city", totalUsers: { $sum: 1 } } }
+])
+```
+
+It is mainly used for complex queries and reports.
+
+In simple words:
+
+* find() → get many documents
+* findOne() → get one document
+* aggregate() → process and analyze data
+
+4.How do you optimize MongoDB queries for performance?
+
+To optimize MongoDB queries for better performance, we mainly try to reduce the amount of data MongoDB needs to scan.
+
+Some common ways are:
+
+1. Use Indexing
+   Indexes make searching faster. Frequently searched fields like email, username, or id should have indexes.
+
+2. Use Proper Queries
+   Only fetch required data instead of getting all fields.
+
+Example:
+
+```js id="2qk8kh"
+User.find({}, { name: 1, email: 1 })
+```
+
+3. Use limit()
+   Limit the number of documents returned.
+
+4. Avoid Unnecessary Data
+   Do not store very large unnecessary data in one document.
+
+5. Use Aggregation Properly
+   Use $match early in the aggregation pipeline to filter data first.
+
+6. Use Pagination
+   Instead of loading all data at once, load data page by page.
+
+7. Monitor Query Performance
+   MongoDB provides explain() to check how queries are working.
+
+In simple words, MongoDB performance is improved by using indexes, writing efficient queries, and reducing unnecessary data processing.
+
+Schema design in MongoDB means how we structure and organize our data inside collections (like tables in SQL). Since MongoDB is flexible, we can design data in different ways based on how our application needs it.
+
+We mainly design schemas to decide:
+
+* what data should be stored together
+* what data should be separated
+* how different data is connected
+
+---
+
+## 1. One-to-One (1:1) Relationship
+
+One document is linked with only one other document.
+
+Example:
+
+* User ↔ Profile
+
+We can store it in two ways:
+
+* In same document (embedding)
+* Or separate collections with reference
+
+Example:
+
+```js id="1kq9ab"
+User {
+  name: "Ritam",
+  profile: {
+    age: 21,
+    city: "Kolkata"
+  }
+}
+```
+
+---
+
+## 2. One-to-Many (1:N) Relationship
+
+One document is linked with many documents.
+
+Example:
+
+* One user → many posts
+
+We usually use:
+
+* embedding (small data)
+* or referencing (large data)
+
+Example:
+
+```js id="7kq2ld"
+User {
+  name: "Ritam",
+  posts: [postId1, postId2, postId3]
+}
+```
+
+---
+
+## 3. Many-to-Many (N:N) Relationship
+
+Many documents are related to many other documents.
+
+Example:
+
+* Students ↔ Courses
+
+We use referencing with arrays on both sides or a separate mapping collection.
+
+Example:
+
+```js id="9xq8dd"
+Student {
+  name: "A",
+  courses: [courseId1, courseId2]
+}
+
+Course {
+  title: "Math",
+  students: [studentId1, studentId2]
+}
+```
+
+---
+
+## Simple Interview Summary
+
+Schema design in MongoDB means deciding how to structure data. We can model relationships in three ways:
+
+* 1:1 → single embedded document or reference
+* 1:N → array or references
+* N:N → references or mapping collection
+
+In simple words, schema design depends on how data is related and how we want to access it efficiently.
