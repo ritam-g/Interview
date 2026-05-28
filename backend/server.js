@@ -1,78 +1,135 @@
-import 'dotenv/config'
-import express from 'express'
-import mongoose from 'mongoose'
-const app = express()
-const PORT = 3000
-app.use(express.json())
+import "dotenv/config";
+import express from "express";
+import mongoose from "mongoose";
 
-mongoose.connect(process.env.mongo)
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('Could not connect to MongoDB', err))
+const app = express();
+const PORT = 3000;
+
+app.use(express.json());
+
+/* ---------------- DB CONNECT ---------------- */
+mongoose
+  .connect(process.env.mongo)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("DB Error:", err));
+
+/* ---------------- SCHEMA ---------------- */
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "Name is required"],
+      required: true,
       trim: true,
     },
     email: {
       type: String,
-      required: [true, "Email is required"],
+      required: true,
       unique: true,
       lowercase: true,
-      trim: true,
     },
     password: {
       type: String,
-      required: [true, "Password is required"],
+      required: true,
       select: false,
     },
     age: {
       type: Number,
       min: 18,
     },
-    gender: {
-      type: String,
-      trim: true,
-    },
-    bio: {
-      type: String,
-      trim: true,
-      default: "",
-    },
-    interests: [
-      {
-        type: String,
-        trim: true,
-      },
-    ],
-    profileImage: {
-      type: String,
-      default: "",
-    },
+    gender: String,
+    bio: String,
   },
   {
     timestamps: true,
+    capped:{
+      size: 100000
+    }
   }
 );
 
+/* ---------------- INDEXING ---------------- */
+userSchema.index({ email: 1 });
+
 const User = mongoose.model("User", userSchema);
 
+/* ---------------- CHANGE STREAM (WATCH) ---------------- */
+const changeStream = User.watch()
 
-app.get('/:limit/:page', async(req, res) => {
-    let { limit, page } = req.params
-    limit = parseInt(limit)
-    page = parseInt(page)
-    try{
-        const users=await User.find().skip(page==0?0*limit: (page-1)*limit).limit(limit)
-        res.json(users)
-    }
-    catch(err){
-        console.log(err)
-        res.status(500).json({ error: 'Internal Server Error' })
-    }
-    
+changeStream.on('change', (change) => {
+  console.log(`Change detected: `,change.operationType)
 })
+
+/* ---------------- CREATE USER ---------------- */
+app.post("/users", async (req, res) => {
+  try {
+    const user = await User.create(req.body);
+    res.status(201).json(user);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+/* ---------------- GET USERS (PAGINATION) ---------------- */
+app.get("/users", async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+
+  try {
+    const users = await User.find()
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    res.json({
+      page,
+      limit,
+      data: users,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Server Error" });
+  }
+});
+
+/* ---------------- UPDATE USER ---------------- */
+app.put("/users/:id", async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.json(user);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+/* ---------------- DELETE USER ---------------- */
+app.delete("/users/:id", async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.json({ message: "User deleted" });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+/* ---------------- AGGREGATION EXAMPLE ---------------- */
+app.get("/users/stats", async (req, res) => {
+  try {
+    const data = await User.aggregate([
+      {
+        $group: {
+          _id: "$gender",
+          totalUsers: { $sum: 1 },
+        },
+      },
+    ]);
+
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* ---------------- SERVER ---------------- */
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
-})
+  console.log(`Server running on port ${PORT}`);
+});

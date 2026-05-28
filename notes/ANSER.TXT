@@ -133,6 +133,8 @@ We mainly design schemas to decide:
 * how different data is connected
 
 ---
+5. What are the different types of relationships in MongoDB?
+
 
 ## 1. One-to-One (1:1) Relationship
 
@@ -220,3 +222,331 @@ Schema design in MongoDB means deciding how to structure data. We can model rela
 * N:N → references or mapping collection
 
 In simple words, schema design depends on how data is related and how we want to access it efficiently.
+
+
+6.Explain data validation and how to enforce it in MongoDB.
+
+
+Data validation in MongoDB is used to make sure only correct and valid data is stored in the database. It helps prevent wrong data types, missing fields, or invalid values.
+
+In Node.js applications, we commonly enforce validation using Mongoose schemas. Enforcing validation means applying rules to the data before saving it into MongoDB. If the data does not follow the rules, Mongoose throws a validation error and does not save the data.
+
+For example:
+
+```js id="u4t7bn"
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  age: {
+    type: Number,
+    min: 18
+  }
+})
+```
+
+In this schema:
+
+* name is required
+* email is required
+* age must be at least 18
+
+If a user tries to save invalid data, Mongoose blocks it and returns an error.
+
+Data validation is important because it keeps the database clean, secure, and consistent.
+
+
+7.What are transactions in MongoDB and when would you use them?
+
+Transactions in MongoDB are used when we want multiple database operations to happen safely together.
+
+It works on the rule:
+
+> Either all operations succeed or none of them succeed.
+
+This is called the “all or nothing” concept.
+
+---
+
+For example, think about a banking app.
+
+Suppose:
+
+* ₹1000 is transferred from User A to User B
+
+Two operations happen:
+
+1. money is removed from A’s account
+2. money is added to B’s account
+
+Now imagine:
+
+* money is removed from A
+* but server crashes before adding money to B
+
+This creates incorrect data.
+
+To solve this problem, we use transactions.
+
+If any operation fails:
+
+* MongoDB cancels all changes
+* database stays correct and consistent
+
+---
+
+Example flow:
+
+* Start transaction
+* Perform multiple operations
+* If everything works → commit transaction
+* If something fails → rollback transaction
+
+---
+
+Simple example:
+
+```js id="q2m8vc"
+const session = await mongoose.startSession();
+
+session.startTransaction();
+
+try {
+  // operation 1
+  // operation 2
+
+  await session.commitTransaction();
+} catch (error) {
+  await session.abortTransaction();
+}
+```
+
+---
+
+We use transactions when:
+
+* payment systems
+* banking apps
+* order management
+* wallet systems
+* booking systems
+
+where data accuracy is very important.
+
+In simple words:
+
+> Transactions help MongoDB perform multiple operations safely together without losing data consistency.
+Here is a **clean, proper interview-ready answer** including both theory + schema part:
+
+---
+
+## **8. What is a Capped Collection?**
+
+A capped collection in MongoDB is a special type of collection that has a fixed size.
+
+When the collection becomes full:
+
+* MongoDB automatically removes the oldest documents
+* and inserts new documents in their place
+
+So, it works like a **circular queue (FIFO system)**.
+
+---
+
+### **Example (Easy Understanding)**
+
+Think of a CCTV recording system:
+Old recordings are automatically deleted when storage is full.
+Similarly, capped collections automatically remove old data.
+
+---
+
+### **Main Features**
+
+* Fixed size collection
+* Fast insertion
+* Maintains insertion order
+* Automatically deletes oldest data
+
+---
+
+### **Use Cases**
+
+* Logs
+* Chat messages
+* Notifications
+* Real-time monitoring data
+
+---
+
+### **How to Create in MongoDB (Proper Way)**
+
+```js id="capmongo1"
+db.createCollection("logs", {
+  capped: true,
+  size: 100000
+})
+```
+
+---
+
+## **Can we define capped collection in Mongoose schema?**
+
+✔ Yes, but only in some cases
+✔ It can be defined in schema options
+✔ But the recommended and reliable way is collection-level creation
+
+---
+
+### **Schema-level (Sometimes works)**
+
+```js id="capschema1"
+const logSchema = new mongoose.Schema(
+  {
+    message: String
+  },
+  {
+    capped: { size: 100000 }
+  }
+);
+```
+
+---
+
+### **Recommended (Production Way)**
+
+```js id="capbest1"
+await mongoose.connection.createCollection("logs", {
+  capped: true,
+  size: 100000
+});
+```
+
+---
+
+### **Important Interview Point**
+
+* Schema = defines structure of data
+* Capped collection = defines behavior of collection (storage rule)
+
+So capped collections are mainly a **MongoDB collection-level feature**, not schema-level.
+
+---
+
+## **Final Simple Interview Answer**
+
+A capped collection is a fixed-size MongoDB collection where old data is automatically removed when new data is inserted. It is used for logs and real-time data.
+
+We can create it using `capped: true` at collection creation time, and in Mongoose it is recommended to define it at the collection level rather than only inside schema.
+
+---
+
+If you want, I can next give you:
+👉 “Top 10 MongoDB interview answers (very high chance questions)”
+
+
+
+9.How does MongoDB handle concurrency?
+
+## **9. How does MongoDB handle concurrency?**
+
+MongoDB handles concurrency by allowing multiple users to read and write data at the same time without blocking the entire database.
+
+It uses **document-level locking**, which means when one document is being updated, only that specific document is locked, not the whole collection or database. This allows other documents to be accessed and modified at the same time.
+
+MongoDB also uses a technique called **MVCC (Multi-Version Concurrency Control)**. This allows readers to access a stable version of data while writers are updating it, so reads and writes can happen together without blocking each other.
+
+In addition, MongoDB uses **transactions** when multiple operations need to be executed together safely. This ensures data consistency in complex operations.
+
+---
+
+### **In simple words:**
+
+MongoDB handles concurrency by locking only the required document and allowing multiple read and write operations to happen at the same time using MVCC, which improves performance and scalability.
+
+
+10.Explain change streams in MongoDB.
+
+## **Explain Change Streams in MongoDB**
+
+Change Streams in MongoDB are used to **listen to real-time changes** happening in a collection, database, or even an entire MongoDB cluster.
+
+It allows an application to get notified whenever data is:
+
+* inserted
+* updated
+* deleted
+
+without repeatedly checking the database.
+
+---
+
+## **How it works**
+
+MongoDB continuously tracks changes in the background.
+Whenever any change happens, it sends an event to your application in real time.
+
+This is done using the `.watch()` method.
+
+---
+
+## **Example (Mongoose)**
+
+```js id="cs1"
+const changeStream = User.watch();
+
+changeStream.on("change", (change) => {
+  console.log("Change detected:", change);
+});
+```
+
+---
+
+## **Where it is used**
+
+Change Streams are used in real-time applications like:
+
+* Chat applications (new messages)
+* Notification systems
+* Live dashboards
+* Activity tracking systems
+
+---
+
+## **Important Note**
+
+Even if we use **Mongoose models**, Change Streams work because:
+
+* Mongoose models are connected to MongoDB collections
+* `.watch()` listens directly to the underlying MongoDB collection
+
+---
+
+## **Simple Working Flow**
+
+```text id="cs2"
+Application (Mongoose Model)
+        ↓
+MongoDB Collection
+        ↓
+Change Stream (.watch)
+        ↓
+Real-time event sent to app
+```
+
+---
+
+## **In simple words:**
+
+Change Streams in MongoDB allow the application to **listen and react to real-time database changes** without polling or repeatedly querying the database.
+
+---
+
+## **Final Interview Answer**
+
+Change Streams in MongoDB are used to listen to real-time changes in a collection or database. Using `.watch()`, the application can detect when data is inserted, updated, or deleted and respond immediately. It is mainly used in real-time applications like chat apps, notifications, and live dashboards.
