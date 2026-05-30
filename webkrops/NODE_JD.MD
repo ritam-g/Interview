@@ -410,11 +410,11 @@ Benefits:
 
 # 18. Fetch vs Axios
 
-| Fetch               | Axios            |
-| ------------------- | ---------------- |
-| Built-in            | External Package |
-| Manual JSON Parsing | Automatic        |
-| Less Features       | More Features    |
+|  | Fetch               | Axios            |
+| - | ------------------- | ---------------- |
+|  | Built-in            | External Package |
+|  | Manual JSON Parsing | Automatic        |
+|  | Less Features       | More Features    |
 
 Interview Answer:
 
