@@ -72,10 +72,32 @@ async function getData() {
 
 // getData()
 
-let Arr=[1,2,3,4,5]
+let Arr = [1, 2, 3, 4, 5]
 
-let arr2=Arr.map((e,i)=>{
-    return e*i
+// let arr2=Arr.map((e,i)=>{
+//     return e*i
+// })
+
+// let arr2=Arr.filter((ele)=>{
+//     return ele%2==0
+// })
+
+
+// const arr2 = Arr.reduce((acc, curr) => {
+//     if (curr % 2 === 0) {
+//         acc[curr] = "even";
+//     } else {
+//         acc[curr] = "odd";
+//     }
+
+//     return acc;
+// }, {});
+
+
+Arr.forEach((ele)=>{
+console.log(ele*10);
 })
 
-console.log(arr2);
+// console.log(arr2);
+
+// console.log(arr2);
