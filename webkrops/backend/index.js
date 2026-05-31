@@ -3,11 +3,18 @@ const mongoose = require("mongoose");
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
+const reateLimit = require("express-rate-limit")
 const app = express();
 
 //! middleware
+const limit = reateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: "Too many request from this IP, please try again after 15 minutes"
+})
 
 
+app.use(limit)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
@@ -59,7 +66,7 @@ app.get('/get-post', async (req, res) => {
 app.post('/register', async (req, res) => {
     const { name, email, password } = req.body
     const hashPass = await bcrypt.hash(password, 10)
-    
+
     const user = await User.create({
         name,
         email,
@@ -74,7 +81,7 @@ app.post('/register', async (req, res) => {
     res.cookie("RefreshToken", RefreshToken, {
         httpOnly: true
     })
-    console.log(user,AcessToken,RefreshToken)
+    console.log(user, AcessToken, RefreshToken)
     return res.json({
         AcessToken,
         RefreshToken,
@@ -97,6 +104,18 @@ app.get("/call/:id", async function (req, res) {
         params,
         query
     })
+})
+app.get("/search", async (req, res) => {
+    const search = req.query.serch
+    console.log(typeof search);
+    const data = await User.find({
+        name: {
+            $regex: search,
+            $options: "i"
+        }
+    })
+
+    return res.json(data)
 })
 
 app.use((err, req, res, next) => {
