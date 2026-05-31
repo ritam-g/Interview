@@ -6,7 +6,13 @@ const cookieParser = require('cookie-parser')
 const reateLimit = require("express-rate-limit");
 const AppError = require("./AppError");
 const app = express();
-const multer=new multer
+const multer = require("multer")
+
+const storage = multer.memoryStorage();
+
+const upload = multer({
+    storage
+});
 //! middleware
 const limit = reateLimit({
     windowMs: 15 * 60 * 1000,
@@ -101,7 +107,13 @@ app.get("/posts", async (req, res) => {
 
     return res.json(posts);
 });
-
+app.post("/uplode", upload.single("image"), async (req, res) => {
+    console.log(req)
+    return res.json({
+        data:req.file,
+        buffer:req.file.buffer
+    })
+})
 app.get("/call/:id", async function (req, res) {
     const params = req.params
     const query = req.query
@@ -111,12 +123,12 @@ app.get("/call/:id", async function (req, res) {
         query
     })
 })
-app.get("/search", async (req, res,next) => {
+app.get("/search", async (req, res, next) => {
     try {
         const search = req.query.serch
 
-        if(!search){
-           throw new AppError("Search is required", 400)
+        if (!search) {
+            throw new AppError("Search is required", 400)
         }
         console.log(typeof search);
         const data = await User.find({
