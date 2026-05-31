@@ -3,9 +3,10 @@ const mongoose = require("mongoose");
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
-const reateLimit = require("express-rate-limit")
+const reateLimit = require("express-rate-limit");
+const AppError = require("./AppError");
 const app = express();
-
+const multer=new multer
 //! middleware
 const limit = reateLimit({
     windowMs: 15 * 60 * 1000,
@@ -38,22 +39,27 @@ const postSchema = new mongoose.Schema({
 
 const Post = mongoose.model("Post", postSchema);
 
-app.get("/create", async (req, res) => {
+app.get("/create", async (req, res, next) => {
 
-    const user = await User.create({
-        name: "Ritam",
-        email: "ritam@gmail.com"
-    });
+    try {
+        const user = await User.create({
+            name: "Ritam",
+            email: "ritam@gmail.com"
+        });
 
-    const post = await Post.create({
-        post_name: "Learning Populate",
-        user: user._id
-    });
+        const post = await Post.create({
+            post_name: "Learning Populate",
+            // user: user._id
+        });
 
-    return res.json({
-        user,
-        post
-    });
+
+        return res.json({
+            user,
+            post
+        });
+    } catch (error) {
+        next(error)
+    }
 });
 app.get('/get-post', async (req, res) => {
     const { page, limit } = req.query
@@ -105,17 +111,26 @@ app.get("/call/:id", async function (req, res) {
         query
     })
 })
-app.get("/search", async (req, res) => {
-    const search = req.query.serch
-    console.log(typeof search);
-    const data = await User.find({
-        name: {
-            $regex: search,
-            $options: "i"
-        }
-    })
+app.get("/search", async (req, res,next) => {
+    try {
+        const search = req.query.serch
 
-    return res.json(data)
+        if(!search){
+           throw new AppError("Search is required", 400)
+        }
+        console.log(typeof search);
+        const data = await User.find({
+            name: {
+                $regex: search,
+                $options: "i"
+            }
+        })
+
+        return res.json(data)
+    } catch (error) {
+        console.log(error);
+        next(error)
+    }
 })
 
 app.use((err, req, res, next) => {
