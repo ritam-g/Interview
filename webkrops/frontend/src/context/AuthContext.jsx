@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useContext } from 'react'
 const Auth = createContext()
 const AuthContext = ({ children }) => {
-    const [user, setUser] = useState("ritam")
+    const [user, setUser] = useState("maty")
     return (
         <Auth.Provider value={{ user, setUser }}>
             {children}
