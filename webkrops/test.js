@@ -156,3 +156,16 @@ let Arr = [1, 2, 3, 4, 5]
 // console.log(rest);
 
 
+localStorage.setItem("name","ritam")
+
+console.log(localStorage.getItem("name"))
+
+const obj={
+    name:"ritam",
+    age:22
+
+}
+
+localStorage.setItem("obj",JSON.stringify(obj))
+
+console.log(JSON.parse(localStorage.getItem("obj")))
