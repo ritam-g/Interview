@@ -1,4 +1,5 @@
 # 🚀 MERN Developer Interview Questions & Answers
+
 ### For Fresher Candidates | Webkrops Interview Prep
 
 ---
@@ -16,9 +17,9 @@
 3. [React.js Questions](#3-reactjs-questions)
 4. [Node.js Questions](#4-nodejs-questions)
 5. [JavaScript Core (Must Know)](#5-javascript-core-must-know)
-6. [REST API & HTTP Concepts](#6-rest-api--http-concepts)
-7. [Git & Version Control](#7-git--version-control)
-8. [HR & Behavioral Questions](#8-hr--behavioral-questions)
+6. [REST API &amp; HTTP Concepts](#6-rest-api--http-concepts)
+7. [Git &amp; Version Control](#7-git--version-control)
+8. [HR &amp; Behavioral Questions](#8-hr--behavioral-questions)
 9. [Quick Tips Before Interview](#9-quick-tips-before-interview)
 
 ---
@@ -32,12 +33,12 @@
 **Answer:**
 MongoDB is a **NoSQL database** that stores data as documents in JSON-like format (called BSON). Unlike SQL databases (like MySQL), it does not use tables and rows.
 
-| Feature | MongoDB (NoSQL) | MySQL (SQL) |
-|---|---|---|
-| Data storage | Documents (JSON) | Tables (rows & columns) |
-| Schema | Flexible (no fixed schema) | Fixed schema |
-| Joins | Using `$lookup` | Native JOIN support |
-| Scaling | Horizontal (easy) | Vertical (harder) |
+| Feature      | MongoDB (NoSQL)            | MySQL (SQL)             |
+| ------------ | -------------------------- | ----------------------- |
+| Data storage | Documents (JSON)           | Tables (rows & columns) |
+| Schema       | Flexible (no fixed schema) | Fixed schema            |
+| Joins        | Using `$lookup`          | Native JOIN support     |
+| Scaling      | Horizontal (easy)          | Vertical (harder)       |
 
 **When to use MongoDB:** When your data structure changes often, or you need to store nested/complex data.
 
@@ -46,6 +47,7 @@ MongoDB is a **NoSQL database** that stores data as documents in JSON-like forma
 ### Q2. What is a Document and a Collection in MongoDB?
 
 **Answer:**
+
 - **Document** = One record (like a row in SQL), stored as JSON/BSON
 - **Collection** = A group of documents (like a table in SQL)
 
@@ -64,9 +66,10 @@ MongoDB is a **NoSQL database** that stores data as documents in JSON-like forma
 ### Q3. What is Mongoose? Why do we use it?
 
 **Answer:**
-Mongoose is an **ODM (Object Data Modeling)** library for MongoDB and Node.js.
+Mongoose is an **ODM (Object Data Modeling)** library for MongoDB and Node.js.Mongoose is an ODM library for MongoDB that makes it easier to store, validate, and manage data in Node.js applications.
 
 **Why use it?**
+
 - Adds schema/structure to MongoDB (which is schema-less)
 - Makes validation easy
 - Provides helper methods like `.find()`, `.save()`, `.populate()`
@@ -110,6 +113,7 @@ await User.findByIdAndDelete(id);
 ### Q5. What is the difference between `find()` and `findOne()`?
 
 **Answer:**
+
 - `find()` — returns **all** documents matching the query (as an array)
 - `findOne()` — returns **only the first** matching document (as an object)
 
@@ -216,6 +220,7 @@ app.use(express.urlencoded({ extended: true })); // Parse form data
 ### Q11. What is the difference between `app.use()` and `app.get()`?
 
 **Answer:**
+
 - `app.use()` — runs for **all HTTP methods** (GET, POST, PUT, DELETE)
 - `app.get()` — runs only for **GET requests**
 
@@ -278,11 +283,11 @@ app.use((err, req, res, next) => {
 
 **Answer:**
 
-| | What it is | Example URL | How to access |
-|---|---|---|---|
-| `req.params` | URL path parameters | `/users/:id` → `/users/123` | `req.params.id` → `"123"` |
-| `req.query` | URL query string | `/users?age=22` | `req.query.age` → `"22"` |
-| `req.body` | POST/PUT request body (JSON) | `{ "name": "Rahul" }` | `req.body.name` → `"Rahul"` |
+|                | What it is                   | Example URL                      | How to access                    |
+| -------------- | ---------------------------- | -------------------------------- | -------------------------------- |
+| `req.params` | URL path parameters          | `/users/:id` → `/users/123` | `req.params.id` → `"123"`   |
+| `req.query`  | URL query string             | `/users?age=22`                | `req.query.age` → `"22"`    |
+| `req.body`   | POST/PUT request body (JSON) | `{ "name": "Rahul" }`          | `req.body.name` → `"Rahul"` |
 
 ---
 
@@ -419,6 +424,7 @@ function Users() {
 ```
 
 **When does useEffect run?**
+
 - `useEffect(() => {...})` — after every render
 - `useEffect(() => {...}, [])` — only once on mount
 - `useEffect(() => {...}, [value])` — when `value` changes
@@ -429,6 +435,7 @@ function Users() {
 
 **Answer:**
 The Virtual DOM is a **lightweight copy of the real DOM kept in memory**. When state changes, React:
+
 1. Creates a new virtual DOM tree
 2. Compares it with the old one (called **diffing**)
 3. Updates **only the changed parts** in the real DOM (called **reconciliation**)
@@ -553,6 +560,7 @@ function App() {
 Node.js is a **JavaScript runtime built on Chrome's V8 engine** — it lets you run JavaScript outside the browser (on the server).
 
 **Why use it:**
+
 - Same language (JavaScript) on frontend and backend
 - Non-blocking, asynchronous — handles many requests efficiently
 - Large npm ecosystem
@@ -583,6 +591,7 @@ console.log('This runs immediately, without waiting');
 ### Q29. What is `npm`? What is `package.json`?
 
 **Answer:**
+
 - **npm** (Node Package Manager) — tool for installing JavaScript packages/libraries
 - **package.json** — file that lists your project's dependencies, scripts, and metadata
 
@@ -609,6 +618,7 @@ console.log('This runs immediately, without waiting');
 ### Q30. What is the difference between `dependencies` and `devDependencies`?
 
 **Answer:**
+
 - `dependencies` — packages needed to **run** the app in production (express, mongoose)
 - `devDependencies` — packages only needed during **development** (nodemon, eslint, jest)
 
@@ -675,11 +685,11 @@ async function getUserWithPosts(id) {
 
 **Answer:**
 
-| | `var` | `let` | `const` |
-|---|---|---|---|
-| Scope | Function scope | Block scope | Block scope |
-| Reassignable | Yes | Yes | No |
-| Hoisting | Yes (as undefined) | Yes (not initialized) | Yes (not initialized) |
+|              | `var`            | `let`               | `const`             |
+| ------------ | ------------------ | --------------------- | --------------------- |
+| Scope        | Function scope     | Block scope           | Block scope           |
+| Reassignable | Yes                | Yes                   | No                    |
+| Hoisting     | Yes (as undefined) | Yes (not initialized) | Yes (not initialized) |
 
 ```javascript
 var x = 1;   // Avoid in modern JS
@@ -692,6 +702,7 @@ const z = 3; // Use when value won't change (preferred)
 ### Q34. What is the difference between `==` and `===`?
 
 **Answer:**
+
 - `==` — compares values **with type conversion** (loose equality)
 - `===` — compares values **without type conversion** (strict equality)
 
@@ -793,13 +804,13 @@ localStorage.removeItem('token'); // On logout
 **Answer:**
 REST (Representational State Transfer) is a set of **conventions for building APIs** using HTTP methods. A REST API lets the frontend and backend communicate.
 
-| HTTP Method | Action | Example URL |
-|---|---|---|
-| GET | Read data | `GET /api/users` |
-| POST | Create data | `POST /api/users` |
-| PUT | Update (full) | `PUT /api/users/:id` |
-| PATCH | Update (partial) | `PATCH /api/users/:id` |
-| DELETE | Delete data | `DELETE /api/users/:id` |
+| HTTP Method | Action           | Example URL               |
+| ----------- | ---------------- | ------------------------- |
+| GET         | Read data        | `GET /api/users`        |
+| POST        | Create data      | `POST /api/users`       |
+| PUT         | Update (full)    | `PUT /api/users/:id`    |
+| PATCH       | Update (partial) | `PATCH /api/users/:id`  |
+| DELETE      | Delete data      | `DELETE /api/users/:id` |
 
 ---
 
@@ -807,21 +818,22 @@ REST (Representational State Transfer) is a set of **conventions for building AP
 
 **Answer:**
 
-| Code | Meaning | When to use |
-|---|---|---|
-| 200 | OK | Successful GET/PUT |
-| 201 | Created | Successful POST |
-| 400 | Bad Request | Invalid input from client |
-| 401 | Unauthorized | Not logged in |
-| 403 | Forbidden | Logged in but no permission |
-| 404 | Not Found | Resource doesn't exist |
-| 500 | Internal Server Error | Bug in your server code |
+| Code | Meaning               | When to use                 |
+| ---- | --------------------- | --------------------------- |
+| 200  | OK                    | Successful GET/PUT          |
+| 201  | Created               | Successful POST             |
+| 400  | Bad Request           | Invalid input from client   |
+| 401  | Unauthorized          | Not logged in               |
+| 403  | Forbidden             | Logged in but no permission |
+| 404  | Not Found             | Resource doesn't exist      |
+| 500  | Internal Server Error | Bug in your server code     |
 
 ---
 
 ### Q41. What is the difference between `GET` and `POST`?
 
 **Answer:**
+
 - `GET` — fetches data, **no request body**, parameters in URL, can be cached/bookmarked
 - `POST` — sends data to server, **has request body**, not cached, used for creating data
 
@@ -851,6 +863,7 @@ eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIxMjMifQ.ABCDEF
 ```
 
 **Flow in MERN:**
+
 1. User logs in → Server verifies credentials → Creates JWT → Sends to client
 2. Client stores JWT in localStorage
 3. For every protected request, client sends JWT in header
@@ -876,6 +889,7 @@ axios.get('/api/profile', {
 ### Q43. What is Git? What is the difference between Git and GitHub?
 
 **Answer:**
+
 - **Git** — version control system installed on your computer to track code changes
 - **GitHub** — cloud platform to host Git repositories and collaborate with others
 
@@ -928,6 +942,7 @@ dist/
 ### Q46. Tell me about yourself.
 
 **Suggested structure (for freshers):**
+
 > "My name is [Name]. I am a recent [B.Tech/BCA/MCA] graduate in Computer Science from [College]. During my studies, I developed strong skills in the MERN stack — MongoDB, Express, React, and Node.js. I built [mention 1-2 projects] which helped me understand how to build full-stack web applications. I am eager to start my career and contribute to a team where I can learn and grow. I am particularly excited about this role at Webkrops because [mention something specific about the company]."
 
 ---
@@ -945,6 +960,7 @@ Research the company before the interview. Mention their product, tech stack, or
 
 **Answer tip:**
 Talk about your best project. Use this structure:
+
 - **What** is the project about?
 - **What tech** did you use?
 - **What was your role?**
@@ -965,6 +981,7 @@ Be honest but show that you are working on it.
 ### Q50. Do you have any questions for us?
 
 **Always ask at least one question! Good options:**
+
 - "What does the tech stack look like day-to-day in this team?"
 - "What does the onboarding process look like for a new developer?"
 - "What does success look like for a fresher developer in the first 3 months?"

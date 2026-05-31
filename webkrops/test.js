@@ -1,10 +1,10 @@
 // the arry in const
 
-const arr = [1, 2, 3, 4, 5];
+const arr100 = [1, 2, 3, 4, 5];
 // ! this means you are creating new memory for the array that const dont allow
 // arr = [1, 2, 3, 4, 5, 6];
 // you are oppeing that arry and adding 6
-arr.push(6);
+arr100.push(6);
 
 // console.log(arr);
 
@@ -94,10 +94,65 @@ let Arr = [1, 2, 3, 4, 5]
 // }, {});
 
 
-Arr.forEach((ele)=>{
-console.log(ele*10);
-})
+// Arr.forEach((ele)=>{
+// console.log(ele*10);
+// })
 
 // console.log(arr2);
 
 // console.log(arr2);
+
+
+// let arr2=[6,7,8,9,10]
+// let arr3=[...arr2,...arr]
+// arr3.push(3434)
+
+// console.log(arr2)
+// console.log(arr3)
+
+// const arr = {
+//     name: "ritam",
+//     age: 22,
+//     address: {
+//         city: "kolkata",
+//         state: "west bengal"
+//     }
+// }
+
+// const cObj = JSON.parse(JSON.stringify(arr))
+// cObj.address.city = "delhi"
+// console.log(cObj);
+// console.log(arr);'''
+
+
+// let arr = [10, 20, [23, [34, [34]]]]
+
+// arr = arr.flat(Infinity)
+
+
+// function reset(...args){
+//     console.log(args)
+// }
+
+
+// reset(1,2,3,4)
+
+
+// const obj={
+//     name:"ritam",
+//     age:22
+// }
+
+// const {name,age}=obj
+
+// console.log(name,age)
+
+// let arr=[1,2,3,4,5]
+
+
+// const [f,s,t,...rest]=arr
+
+// console.log(f,s,t);
+// console.log(rest);
+
+
