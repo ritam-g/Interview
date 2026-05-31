@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const cookieParser = require('cookie-parser')
 const app = express();
 
 //! middleware
@@ -8,7 +10,7 @@ const app = express();
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-
+app.use(cookieParser())
 
 mongoose.connect("mongodb://localhost:27017/populate_demo")
     .then(() => console.log("MongoDB Connected"))
@@ -16,7 +18,8 @@ mongoose.connect("mongodb://localhost:27017/populate_demo")
 
 const userSchema = new mongoose.Schema({
     name: String,
-    email: String
+    email: String,
+    password: String
 });
 userSchema.index({ email: 1 })
 const User = mongoose.model("User", userSchema);
@@ -45,7 +48,40 @@ app.get("/create", async (req, res) => {
         post
     });
 });
+app.get('/get-post', async (req, res) => {
+    const { page, limit } = req.query
 
+    const skipNum = (page - 1) * limit
+    const posts = await Post.find().skip(skipNum).limit(limit)
+    return res.json(posts)
+})
+
+app.post('/register', async (req, res) => {
+    const { name, email, password } = req.body
+    const hashPass = await bcrypt.hash(password, 10)
+    
+    const user = await User.create({
+        name,
+        email,
+        password: hashPass
+    })
+    const AcessToken = jwt.sign({ id: user._id }, "sec", { expiresIn: "15m" })
+    const RefreshToken = jwt.sign({ id: user._id }, "sec", { expiresIn: "15d" })
+
+    res.cookie("AcessToken", AcessToken, {
+        httpOnly: true
+    })
+    res.cookie("RefreshToken", RefreshToken, {
+        httpOnly: true
+    })
+    console.log(user,AcessToken,RefreshToken)
+    return res.json({
+        AcessToken,
+        RefreshToken,
+        user
+    })
+
+})
 app.get("/posts", async (req, res) => {
 
     const posts = await Post.find().populate("user")
@@ -54,8 +90,8 @@ app.get("/posts", async (req, res) => {
 });
 
 app.get("/call/:id", async function (req, res) {
-    const params=req.params
-    const query=req.query
+    const params = req.params
+    const query = req.query
 
     return res.json({
         params,
