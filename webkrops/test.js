@@ -156,16 +156,143 @@ let Arr = [1, 2, 3, 4, 5]
 // console.log(rest);
 
 
-localStorage.setItem("name","ritam")
+// localStorage.setItem("name","ritam")
 
-console.log(localStorage.getItem("name"))
+// console.log(localStorage.getItem("name"))
 
-const obj={
-    name:"ritam",
-    age:22
+// const obj={
+//     name:"ritam",
+//     age:22
 
+// }
+
+// localStorage.setItem("obj",JSON.stringify(obj))
+
+// console.log(JSON.parse(localStorage.getItem("obj")))
+
+
+const p = new Promise((res, rej) => res("hey i am resolve"))
+
+// p.then((msg) => console.log(msg))
+
+// async function call() {
+//     return "hellow"
+// }
+
+// (async function getData() {
+//     let data = await call()
+//     console.log(data);
+// })()
+
+
+const user = {
+    name: "ritam",
+    age: 22,
+    call: function () {
+        console.log(this.name)
+    },
+    call2: () => {
+        console.log(this.name)
+    },
+    call3: function () {
+        (() => {
+            console.log(this);
+        })()
+    }
 }
 
-localStorage.setItem("obj",JSON.stringify(obj))
 
-console.log(JSON.parse(localStorage.getItem("obj")))
+// user.call()
+// user.call2()
+// user.call3()
+
+// function execute(){
+//     console.log('   this is execute');
+// }
+
+// execute.prototype.callMe=()=>console.log('this is call me')
+
+
+// const obj=new execute()
+
+// obj.callMe()
+
+function isPalindrom(string) {
+    if (typeof string === "string") {
+        let temp = string
+        return temp === string.split("").reverse().join("")
+    } else {
+        let temp = string
+        let reverse = 0
+        while (string > 0) {
+            let last = string % 10
+            reverse = (reverse * 10) + last
+
+            string = Math.floor(string / 10)
+        }
+        return reverse === temp
+    }
+}
+
+// console.log(isPalindrom(121))
+
+function sortArray(arr) {
+    // ate the end will be 1 [0,0,,1,1,1] ,[0,1,0]
+
+    let left = 0
+    let right = arr.length - 1
+
+    while (left < right) {
+        if (arr[left] == 0) left++
+        else if (arr[right] == 1) right--
+        else {
+            [arr[left], arr[right]] = [arr[right], arr[left]]
+            left++
+            right--
+        }
+    }
+
+    return arr
+}
+
+// console.log(sortArray([1,0,1,0,1]))
+
+// max consucutev
+
+function maxConsecutive(arr) {
+    let num = null
+    let count = 0
+    let max = 0
+
+    for (let n of arr) {
+        if (count == 0) num = n
+        if (num == n) count++
+        else {
+            num == null
+            count = 0
+        }
+        max = Math.max(max, count)
+    }
+    return max
+}
+
+// console.log(maxConsecutive([1,1,0,1,1,1]));
+
+
+function sum(str) {
+    let ans = 0
+    let store = ""
+    let total=0
+    for (let n of str) {
+        if (n >= "0" && n <= "9") {
+            srote += n
+        }else{
+            total +=Number(store)
+            srote=""
+        }
+    }
+
+    return total
+}
+
+console.log(sum("aass1fg23jk1"))
