@@ -280,19 +280,23 @@ function maxConsecutive(arr) {
 
 
 function sum(str) {
-    let ans = 0
-    let store = ""
-    let total=0
+    let store = "";
+    let total = 0;
+
     for (let n of str) {
+
         if (n >= "0" && n <= "9") {
-            srote += n
-        }else{
-            total +=Number(store)
-            srote=""
+            store += n;
+        } else {
+            total += Number(store );
+            store = "";
         }
+
     }
 
-    return total
+    total += Number(store || 0);
+
+    return total;
 }
 
-console.log(sum("aass1fg23jk1"))
+console.log(sum("aass1fg23jk1"));
