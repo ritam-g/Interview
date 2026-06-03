@@ -50,7 +50,7 @@ Practice Question:
   var a = 10;
   let b = 20;
 }
-		
+	
 console.log(a);
 console.log(b);
 ```
@@ -86,7 +86,7 @@ const prevents changing the reference, not the contents."Yes. `const` prevents r
 
 `const` stops you from replacing the whole array with a new one, but it allows you to change the items inside it
 
-Practice:		
+Practice:
 
 ```js
 const user = {
@@ -185,7 +185,7 @@ ReferenceError
 # 6. Temporal Dead Zone (TDZ)
 
 TDZ is the time between variable declaration and initialization.
-Temporal Dead Zone is the time between the creation of a `let` or `const` variable and its initialization. During this period, accessing the variable causes a ReferenceError	
+Temporal Dead Zone is the time between the creation of a `let` or `const` variable and its initialization. During this period, accessing the variable causes a ReferenceError
 
 Example:
 
@@ -326,8 +326,7 @@ Ritam
 
 A Promise represents a future value.
 
-
-Promise is a built-in JavaScript class that helps handle asynchronous operations. It represents a future value and can be in three states: pending, fulfilled, or rejected. We commonly use Promises for API calls and handle the result using `.then()` and `.catch()`			
+Promise is a built-in JavaScript class that helps handle asynchronous operations. It represents a future value and can be in three states: pending, fulfilled, or rejected. We commonly use Promises for API calls and handle the result using `.then()` and `.catch()`
 
 Example:
 
@@ -485,7 +484,7 @@ Output:
 [2,4]
 ```
 
-reduce()
+reduce()		
 
 Returns single value.
 
