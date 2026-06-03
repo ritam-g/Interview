@@ -142,3 +142,122 @@ const arr = [1, 2, 3, 4];
 
 // // console.log(arr.splice(0,2))
 // console.log(arr.includes(1))
+
+// console.log(typeof "")
+
+// 8. for...in vs for...of
+
+// const obj={
+//     name:"ritam",
+//     age:22
+// }
+
+// for(let key in obj){
+//     console.log(key)
+//     console.log(obj[key])
+// }
+
+
+
+// for (let n of arr) {
+//     console.log(n)
+// }
+
+// function one() {
+//     console.log("i am one ")
+// }
+
+// one.prototype.callMe=(msg)=>{console.log(msg)}
+
+// const obj=new one()
+
+// obj.callMe("i am two")
+
+// ! own reduce
+
+function ownReducer(arr, cb, initialValue) {
+    let ans = initialValue
+    for (let n of arr) {
+        ans = cb(ans, n)
+    }
+    return ans
+}
+
+// console.log(ownReducer([1, 2], (acc, ele) => acc - ele, 0))
+const users = [
+    { name: "Ritam", city: "Kolkata" },
+    { name: "Rahul", city: "Delhi" },
+    { name: "Amit", city: "Kolkata" }
+];
+// {
+//   Kolkata: [
+//     { name: "Ritam", city: "Kolkata" },
+//     { name: "Amit", city: "Kolkata" }
+//   ],
+//   Delhi: [
+//     { name: "Rahul", city: "Delhi" }
+//   ]
+// }
+
+// console.log(users.reduce((acc, { name, city }) => {
+//     if (acc[city]) {
+//         acc[city] = [...acc[city], { name, city }]
+//     }
+//     else {
+//         acc[city] = [{ name, city }]
+//     }
+//     return acc
+// }, {}))
+// function groupBy(arr, key) {
+//     const result = {}
+
+//     for (let n of arr) {
+//         let obj = n
+//         let value = n[key]
+//         if (result[value]) {
+//             result[value] = [...result[value], obj]
+//         }
+//         else {
+//             result[value] = [obj]
+//         }
+//     }
+//     return result
+// }
+
+// console.log(groupBy(users, "city"))
+function faltArray(arr) {
+    let result = []
+    for (let n of arr) {
+        if (Array.isArray(n)) {
+            // console.log(result)
+            result.push(...faltArray(n))
+            // console.log(result)
+        }
+        else result.push(n)
+    }
+    return result
+}
+// console.log(faltArray([1, [2, [3, 4]], 5]))
+function checkPrime(n) {
+    if (n < 2) return false
+    for (let i = 2; i < Math.floor(n / 2); i++) {
+        if (n % 2 == 0) return false
+    }
+    return true
+}
+
+// console.log(checkPrime(100))
+function printPrimeNumber(n) {
+    //for every number will having range 2 to n 
+
+    for (let ele = 2; ele < n; ele++) {
+        let isPrime = true
+        for (let itrate = 2; itrate < ele; itrate++) {
+
+            if (ele % itrate == 0) isPrime = false; break
+        }
+        if (isPrime) console.log(ele)
+    }
+}
+
+console.log(printPrimeNumber(10))
