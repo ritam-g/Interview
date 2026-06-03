@@ -260,4 +260,41 @@ function printPrimeNumber(n) {
     }
 }
 
-console.log(printPrimeNumber(10))
+// console.log(printPrimeNumber(10))
+
+let stack = []
+
+stack.push(10)
+stack.push(10)
+stack.push(10)
+stack.push(10)
+stack.push(20)
+
+stack.pop()
+
+// console.log(stack)
+
+let queue = []
+
+queue.push(20)
+queue.push(10)
+queue.push(10)
+queue.push(10)
+queue.push(20)
+
+queue.shift()
+// queue.unshift(10000)
+// console.log(queue)
+
+// console.log(100/50/2)
+class Car {
+    #owner = "ritam"
+
+    getOwner() {
+        return this.#owner
+    }
+}
+
+const car=new Car()
+console.log(car.getOwner())
+
