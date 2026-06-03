@@ -721,6 +721,7 @@ null === undefined // false
 
 **Answer:**
 A Promise is an object that represents a **future value** — something that will be available later (success or failure).
+A **Promise** in JavaScript is an object that represents the future result of an asynchronous operation. Think of it like a **placeholder** for data that is still loading—like a restaurant pager. It tells you that the data will either arrive successfully or fail.
 
 ```javascript
 // States: pending → fulfilled OR rejected
@@ -737,26 +738,45 @@ promise
 
 ---
 
-### Q36. What is the spread operator (`...`)?
+## <>. Spread Operator (Expands elements)
 
-**Answer:**
-The spread operator **expands** an array or object into individual elements.
+**"Spread unpacks items.** It takes an array or an object and **splits it apart** into individual pieces. You use it to copy or combine data."
 
-```javascript
-// Arrays
-const arr1 = [1, 2, 3];
-const arr2 = [...arr1, 4, 5]; // [1, 2, 3, 4, 5]
+* When to use it: When you want to copy or combine data.
+* Simple Example:
+  ```javascript
+  const fruits = ["🍎", "🍌"];
 
-// Objects (common in React state updates)
-const user = { name: 'Rahul', age: 22 };
-const updatedUser = { ...user, age: 23 }; // { name: 'Rahul', age: 23 }
+  // Spread copies the fruits into a new list
+  const moreFruits = [...fruits, "🍊", "🍇"]; 
 
-// Function parameters
-function sum(...numbers) {
-  return numbers.reduce((a, b) => a + b, 0);
-}
-sum(1, 2, 3, 4); // 10
-```
+  console.log(moreFruits); // ["🍎", "🍌", "🍊", "🍇"]
+  ```
+
+## <>. Rest Operator (Gathers elements)
+
+**"Rest packs items.** It collects multiple separate values and **squishes them together** into a single array. You use it in functions to catch all the leftover ingredients."
+
+* When to use it: Inside function arguments to handle "the rest" of the data.
+* Simple Example:
+  ```javascript
+  // The ...others collects all extra items into a list
+  function packBag(mainItem, ...others) {
+    console.log(mainItem); // "💻 Laptop"
+    console.log(others);   // ["🔑 Keys", "🎧 Headphones"]
+  }
+
+  packBag("💻 Laptop", "🔑 Keys", "🎧 Headphones");
+  ```
+
+---
+
+## 💡 The Golden Rule to Remember:
+
+* Spread splits an array apart into single items.
+* Rest squishes single items together into an array.
+
+Would you like a quick interview question scenario to test how well you can spot the difference between them?
 
 ---
 
