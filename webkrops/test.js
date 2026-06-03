@@ -288,7 +288,7 @@ function sum(str) {
         if (n >= "0" && n <= "9") {
             store += n;
         } else {
-            total += Number(store );
+            total += Number(store);
             store = "";
         }
 
@@ -299,4 +299,29 @@ function sum(str) {
     return total;
 }
 
-console.log(sum("aass1fg23jk1"));
+// console.log(sum("aass1fg23jk1"));
+
+function reverseString(str) {
+    let words = []
+    let word = ""
+
+    for (let ch of str) {
+        if (ch == " ") {
+            words[words.length]=word
+            word = ""
+        } else {
+            word += ch
+        }
+    }
+
+    words[words.length]=word
+
+    let result=""
+    for(let i=words.length-1;i>=0;i--){
+        result+=words[i]
+        result+=" "
+    }
+    return result
+}
+
+console.log(reverseString("hello world"));

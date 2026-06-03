@@ -1,0 +1,181 @@
+//SECTION - ASKED QUESTION NOT ANSER
+
+1. reverse  this with withou inbuilt methode "hellow world"
+2. class component vs function component
+3. react cycle 
+
+
+1.// Reverse the order of words without using split(), reverse(), or join()
+// Input: "hello world"
+// Output: "world hello"
+
+function reverseWords(str) {
+    let words = [];
+    let word = "";
+
+    // Create words manually
+    for (let ch of str) {
+        if (ch === " ") {
+            words[words.length] = word;
+            word = "";
+        } else {
+            word += ch;
+        }
+    }
+    words[words.length] = word;
+
+    // Reverse words manually
+    let result = "";
+    for (let i = words.length - 1; i >= 0; i--) {
+        result += words[i];
+
+        if (i !== 0) {
+            result += " ";
+        }
+    }
+
+    return result;
+}
+
+console.log(reverseWords("hello world"));
+// Output: world hello
+
+### 2. Class Component vs Functional Component
+
+| Class Component                              | Functional Component          |
+| -------------------------------------------- | ----------------------------- |
+| Uses ES6 classes                             | Uses JavaScript functions     |
+| Uses `this` keyword                          | No `this` keyword             |
+| Uses lifecycle methods (`componentDidMount`) | Uses Hooks (`useEffect`)      |
+| More boilerplate code                        | Less code, easier to read     |
+| Older approach                               | Modern React approach         |
+| State managed with `this.state`              | State managed with `useState` |
+
+**Example Class Component**
+
+```jsx
+class Welcome extends React.Component {
+    render() {
+        return <h1>Hello</h1>;
+    }
+}
+```
+
+**Example Functional Component**
+
+```jsx
+function Welcome() {
+    return <h1>Hello</h1>;
+}
+```
+
+---
+
+### 3. React Lifecycle
+
+#### Mounting (Component Created)
+
+1. `constructor()`
+2. `render()`
+3. `componentDidMount()`
+
+```jsx
+componentDidMount() {
+    console.log("Component Mounted");
+}
+```
+
+---
+
+#### Updating (State/Props Changed)
+
+1. `render()`
+2. `componentDidUpdate()`
+
+```jsx
+componentDidUpdate() {
+    console.log("Component Updated");
+}
+```
+
+---
+
+#### Unmounting (Component Removed)
+
+1. `componentWillUnmount()`
+
+```jsx
+componentWillUnmount() {
+    console.log("Component Removed");
+}
+```
+
+---
+
+### Modern React (Functional Component Lifecycle)
+
+```jsx
+useEffect(() => {
+    console.log("Mounted");
+
+    return () => {
+        console.log("Unmounted");
+    };
+}, []);
+```
+
+**Interview One-Liner:**
+
+> React lifecycle has three phases: **Mounting, Updating, and Unmounting**. In functional components, lifecycle behavior is handled using the **useEffect Hook**.
+
+
+### When do we use Class Components and Functional Components?
+
+**Interview Answer:**
+
+Today, in modern React, we mostly use **Functional Components** because they are simpler, easier to read, and support Hooks like `useState` and `useEffect`.
+
+#### Functional Component (Recommended)
+
+Use when:
+
+* Creating new React applications.
+* Managing state with Hooks.
+* Handling API calls with `useEffect`.
+* Writing cleaner and less code.
+
+```jsx
+function User() {
+    const [name, setName] = useState("Ritam");
+
+    return <h1>{name}</h1>;
+}
+```
+
+---
+
+#### Class Component
+
+Use when:
+
+* Working on older React projects.
+* Maintaining legacy codebases.
+* The project was built before Hooks were introduced.
+
+```jsx
+class User extends React.Component {
+    state = {
+        name: "Ritam"
+    };
+
+    render() {
+        return <h1>{this.state.name}</h1>;
+    }
+}
+```
+
+---
+
+### Short Interview Answer
+
+> Functional components are used in modern React development because they are simpler and support Hooks. Class components are mainly used when maintaining older React applications that were built before Hooks were introduced.
