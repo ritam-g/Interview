@@ -1,62 +1,99 @@
-# JavaScript Interview Questions - Rules & Concepts
+# JavaScript Interview Questions
 
 ---
 
-# Question 1: Hoisting with var
+# Question 1: Hoisting with `var`
+
+## Question
 
 ```js
 var x = 1;
 
 function foo() {
   console.log(x);
+
   var x = 2;
+
   console.log(x);
 }
 
 foo();
 ```
 
-## Output
+## Answer
 
 ```js
 undefined
 2
 ```
 
-## Rule
+## Explanation
 
-### Hoisting
+JavaScript hoists variable declarations to the top of their scope.
 
-JavaScript moves variable declarations to the top of their scope before execution.
+Before execution:
 
 ```js
 function foo() {
   var x;
+
   console.log(x);
+
   x = 2;
+
   console.log(x);
 }
 ```
 
-Only the declaration is hoisted, not the value assignment.
+The declaration is moved to the top but the assignment remains in place.
 
-### Interview Concept
+First console:
 
-- var is hoisted
-- initialized with undefined
-- function scope
+```js
+console.log(x);
+```
+
+prints:
+
+```js
+undefined
+```
+
+because `x` exists but has not been assigned a value yet.
+
+After:
+
+```js
+x = 2;
+```
+
+the second console prints:
+
+```js
+2
+```
+
+### Concept Tested
+
+* Hoisting
+* Function Scope
+* `var`
 
 ---
 
 # Question 2: Type Coercion
 
+## Question
+
 ```js
 console.log(1 + '2' + '2');
+
 console.log(1 + +'2' + '2');
+
 console.log('A' - 'B' + '2');
 ```
 
-## Output
+## Answer
 
 ```js
 122
@@ -64,72 +101,118 @@ console.log('A' - 'B' + '2');
 NaN2
 ```
 
-## Rules
+## Explanation
 
-### String Concatenation
+### First Statement
 
 ```js
 1 + '2'
 ```
 
-becomes
+becomes:
 
 ```js
 '12'
 ```
 
-because one operand is a string.
+Then:
+
+```js
+'12' + '2'
+```
+
+becomes:
+
+```js
+'122'
+```
 
 ---
 
-### Unary Plus Operator
+### Second Statement
+
+Unary plus converts a string into a number.
 
 ```js
 +'2'
 ```
 
-converts string to number.
+becomes:
 
 ```js
-Number('2')
+2
+```
+
+Now:
+
+```js
+1 + 2 = 3
+```
+
+Then:
+
+```js
+3 + '2'
+```
+
+becomes:
+
+```js
+'32'
 ```
 
 ---
 
-### Invalid Arithmetic
+### Third Statement
 
 ```js
 'A' - 'B'
 ```
 
-becomes
+tries numeric subtraction.
+
+Strings cannot be converted into valid numbers.
+
+Result:
 
 ```js
 NaN
 ```
 
-because subtraction requires numbers.
+Then:
 
-### Interview Concept
+```js
+NaN + '2'
+```
 
-- Type coercion
-- String concatenation
-- Unary +
-- NaN
+becomes:
+
+```js
+'NaN2'
+```
+
+### Concept Tested
+
+* Type Coercion
+* Unary Plus
+* NaN
+* String Concatenation
 
 ---
 
-# Question 3: Closure + Event Loop
+# Question 3: Closure and Event Loop
+
+## Question
 
 ```js
 for (var i = 0; i < 3; i++) {
-  setTimeout(() => {
+  setTimeout(function() {
     console.log(i);
   }, 0);
 }
 ```
 
-## Output
+## Answer
 
 ```js
 3
@@ -137,11 +220,15 @@ for (var i = 0; i < 3; i++) {
 3
 ```
 
-## Rules
+## Explanation
 
-### var is Function Scoped
+`setTimeout()` is asynchronous.
 
-Only one variable exists.
+The loop finishes before callbacks execute.
+
+Because `var` is function-scoped, only one variable `i` exists.
+
+Loop execution:
 
 ```js
 i = 0
@@ -150,157 +237,264 @@ i = 2
 i = 3
 ```
 
-After loop finishes:
+After the loop finishes:
 
 ```js
-i = 3
+i === 3
 ```
 
-All callbacks access same variable.
+All callbacks access the same variable.
 
----
+Therefore:
 
-### Event Loop
+```js
+3
+3
+3
+```
 
-setTimeout callback executes after loop completes.
+If we use `let`:
 
-### Interview Concept
+```js
+for (let i = 0; i < 3; i++)
+```
 
-- Closure
-- Event Loop
-- var vs let
+Output becomes:
+
+```js
+0
+1
+2
+```
+
+because `let` creates a new binding for every iteration.
+
+### Concept Tested
+
+* Closure
+* Event Loop
+* `var` vs `let`
+* Asynchronous JavaScript
 
 ---
 
 # Question 4: this Keyword
 
+## Question
+
 ```js
+const obj = {
+  name: 'Alice',
+
+  greet: function() {
+    console.log(this.name);
+  },
+
+  greetArrow: () => {
+    console.log(this.name);
+  }
+};
+
 obj.greet();
+
 obj.greetArrow();
 ```
 
-## Output
+## Answer
 
 ```js
 Alice
 undefined
 ```
 
-## Rules
+## Explanation
 
 ### Normal Function
 
 ```js
-this = object calling function
+obj.greet();
 ```
 
-```js
-obj.greet()
-```
-
-therefore
+The object before the dot becomes `this`.
 
 ```js
 this === obj
 ```
 
+Therefore:
+
+```js
+Alice
+```
+
+is printed.
+
 ---
 
 ### Arrow Function
 
-Arrow functions do not create their own this.
+Arrow functions do not create their own `this`.
 
-They inherit it from outer scope.
+They inherit `this` from the surrounding scope.
 
-### Interview Concept
+In most environments:
 
-- this binding
-- lexical this
-- arrow functions
+```js
+this.name
+```
+
+is undefined.
+
+Therefore:
+
+```js
+undefined
+```
+
+is printed.
+
+### Concept Tested
+
+* `this`
+* Arrow Functions
+* Lexical Scope
 
 ---
 
-# Question 5: Filter and Map
+# Question 5: filter() and map()
+
+## Question
 
 ```js
-arr.filter(x => x % 2 === 0)
-   .map(x => x * 3)
+const arr = [1, 2, 3, 4, 5];
+
+console.log(
+  arr.filter(x => x % 2 === 0)
+     .map(x => x * 3)
+);
 ```
 
-## Output
+## Answer
 
 ```js
-[6,12]
+[6, 12]
 ```
 
-## Rules
+## Explanation
 
 ### filter()
 
-Returns elements matching condition.
+Keeps only even numbers.
 
 ```js
-[2,4]
+[2, 4]
 ```
-
-### map()
-
-Transforms each element.
-
-```js
-[6,12]
-```
-
-### Interview Concept
-
-Array chaining
 
 ---
 
-# Question 6: Destructuring Defaults
+### map()
+
+Multiplies every value by 3.
+
+```js
+2 * 3 = 6
+4 * 3 = 12
+```
+
+Result:
+
+```js
+[6, 12]
+```
+
+### Concept Tested
+
+* Array Methods
+* Chaining
+* Functional Programming
+
+# Question 6: Array Destructuring with Default Values
+
+## Question
 
 ```js
 const [a = 5, b = 7] = [1];
+
+console.log(a, b);
 ```
 
-## Output
+## Answer
 
 ```js
 1 7
 ```
 
-## Rule
+## Explanation
 
-Default value works only when value is undefined.
+Array destructuring assigns values based on position.
+
+```js
+[a, b] = [1]
+```
+
+means:
 
 ```js
 a = 1
 b = undefined
 ```
 
-therefore
+Since `b` is undefined, the default value is used.
 
 ```js
 b = 7
 ```
 
-### Interview Concept
+Final values:
 
-Array destructuring
+```js
+a = 1
+b = 7
+```
+
+### Concept Tested
+
+* Array Destructuring
+* Default Parameters
+* Undefined Values
 
 ---
 
-# Question 7: Rest and Spread
+# Question 7: Rest and Spread Operator
+
+## Question
 
 ```js
-function sum(...args)
+function sum(...args) {
+  return args.reduce((acc, val) => acc + val, 0);
+}
+
+console.log(sum(1, 2, 3));
+
+console.log(sum(...[4, 5, 6]));
 ```
 
-## Rule
+## Answer
+
+```js
+6
+15
+```
+
+## Explanation
 
 ### Rest Operator
 
-Collects values into array.
+```js
+...args
+```
+
+collects all arguments into an array.
 
 ```js
 sum(1,2,3)
@@ -308,11 +502,21 @@ sum(1,2,3)
 args = [1,2,3]
 ```
 
+Reduce:
+
+```js
+1 + 2 + 3 = 6
+```
+
 ---
 
 ### Spread Operator
 
-Expands array into individual values.
+```js
+...[4,5,6]
+```
+
+expands array elements.
 
 ```js
 sum(...[4,5,6])
@@ -320,414 +524,1074 @@ sum(...[4,5,6])
 sum(4,5,6)
 ```
 
-### Interview Concept
+Result:
 
-Rest vs Spread
+```js
+4 + 5 + 6 = 15
+```
+
+### Concept Tested
+
+* Rest Operator
+* Spread Operator
+* Reduce Method
 
 ---
 
-# Question 8: typeof
+# Question 8: typeof Operator
+
+## Question
 
 ```js
-typeof null
-typeof []
-typeof function(){}
+console.log(typeof null);
+
+console.log(typeof undefined);
+
+console.log(typeof []);
+
+console.log(typeof function(){});
 ```
 
-## Output
+## Answer
 
 ```js
 object
+undefined
 object
 function
 ```
 
-## Rules
+## Explanation
 
 ### typeof null
 
-Historical JavaScript bug.
+```js
+typeof null
+```
 
-### Array
+returns:
 
-Arrays are special objects.
+```js
+object
+```
 
-### Function
-
-Functions have special type.
-
-### Interview Concept
-
-Data types
+This is a historical bug in JavaScript.
 
 ---
 
-# Question 9: Nullish Coalescing
+### typeof undefined
 
 ```js
-a = null ?? 'default'
+typeof undefined
 ```
 
-## Rule
+returns:
 
-Only checks:
+```js
+undefined
+```
+
+---
+
+### typeof []
+
+Arrays are objects internally.
+
+```js
+typeof []
+```
+
+returns:
+
+```js
+object
+```
+
+---
+
+### typeof function(){}
+
+Functions have a special type.
+
+```js
+typeof function(){}
+```
+
+returns:
+
+```js
+function
+```
+
+### Concept Tested
+
+* Data Types
+* typeof Operator
+* JavaScript Quirks
+
+---
+
+# Question 9: Nullish Coalescing Operator
+
+## Question
+
+```js
+const a = null ?? 'default';
+
+const b = 0 ?? 'zero';
+
+const c = '' ?? 'empty';
+
+console.log(a, b, c);
+```
+
+## Answer
+
+```js
+default 0
+```
+
+Third value is an empty string.
+
+## Explanation
+
+The nullish coalescing operator checks only:
 
 ```js
 null
 undefined
 ```
 
-Does NOT check:
+---
+
+### First Variable
+
+```js
+null ?? 'default'
+```
+
+returns:
+
+```js
+'default'
+```
+
+---
+
+### Second Variable
+
+```js
+0 ?? 'zero'
+```
+
+returns:
 
 ```js
 0
+```
+
+because `0` is not null or undefined.
+
+---
+
+### Third Variable
+
+```js
+'' ?? 'empty'
+```
+
+returns:
+
+```js
 ''
-false
 ```
 
-### Difference
+because an empty string is still a valid value.
 
-```js
-0 || 5
-```
+### Concept Tested
 
-returns
-
-```js
-5
-```
-
-but
-
-```js
-0 ?? 5
-```
-
-returns
-
-```js
-0
-```
-
-### Interview Concept
-
-|| vs ??
+* Nullish Coalescing
+* Difference Between || and ??
+* Falsy Values
 
 ---
 
 # Question 10: Promise Chaining
 
+## Question
+
 ```js
 Promise.resolve(1)
+
+  .then(v => v + 1)
+
+  .then(v => {
+    throw new Error('oops');
+  })
+
+  .catch(e => 'caught')
+
+  .then(v => console.log(v));
 ```
 
-## Rule
-
-Each then returns value to next then.
+## Answer
 
 ```js
-1 → 2
+caught
 ```
 
-Error thrown:
+## Explanation
+
+### Step 1
+
+Promise starts with:
 
 ```js
-throw new Error()
+1
 ```
-
-moves control to catch.
-
-### Interview Concept
-
-- Promise chain
-- Error propagation
 
 ---
 
-# Question 11: Object Spread
+### Step 2
+
+First then:
 
 ```js
+v + 1
+```
+
+becomes:
+
+```js
+2
+```
+
+---
+
+### Step 3
+
+Second then throws an error.
+
+```js
+throw new Error('oops')
+```
+
+Promise becomes rejected.
+
+---
+
+### Step 4
+
+The catch block handles the error.
+
+```js
+.catch(() => 'caught')
+```
+
+returns:
+
+```js
+'caught'
+```
+
+---
+
+### Step 5
+
+Next then receives:
+
+```js
+'caught'
+```
+
+and prints:
+
+```js
+caught
+```
+
+### Concept Tested
+
+* Promises
+* Error Handling
+* Promise Chaining
+* Async JavaScript
+# Question 11: Object Spread Operator
+
+## Question
+
+```js
+const a = { x: 1, y: 2 };
+
+const b = { y: 3, z: 4 };
+
 const c = { ...a, ...b };
+
+console.log(c.x, c.y, c.z);
 ```
 
-## Rule
-
-Later properties overwrite earlier properties.
+## Answer
 
 ```js
-y:2
+1 3 4
 ```
 
-replaced by
+## Explanation
+
+The spread operator copies properties from objects.
 
 ```js
-y:3
+{ ...a, ...b }
 ```
 
-### Interview Concept
+becomes:
 
-Object merging
+```js
+{
+  x: 1,
+  y: 2,
+  y: 3,
+  z: 4
+}
+```
+
+When duplicate properties exist, the later value wins.
+
+```js
+y: 3
+```
+
+overwrites:
+
+```js
+y: 2
+```
+
+### Concept Tested
+
+* Object Spread Operator
+* Object Merging
+* Property Overwriting
 
 ---
 
 # Question 12: Logical Operators
 
+## Question
+
+```js
+let x = 0;
+
+const y = x || 5;
+
+const z = x && 5;
+
+console.log(y, z);
+```
+
+## Answer
+
+```js
+5 0
+```
+
+## Explanation
+
+### OR Operator (||)
+
+Returns the first truthy value.
+
 ```js
 0 || 5
 ```
 
-returns first truthy value.
+Since `0` is falsy:
 
 ```js
 5
 ```
 
+is returned.
+
 ---
+
+### AND Operator (&&)
+
+Returns the first falsy value.
 
 ```js
 0 && 5
 ```
 
-returns first falsy value.
+Since `0` is falsy:
 
 ```js
 0
 ```
 
-### Interview Concept
+is returned immediately.
 
-Short Circuit Evaluation
+### Concept Tested
+
+* Logical Operators
+* Short Circuit Evaluation
+* Truthy and Falsy Values
 
 ---
 
-# Question 13: Prototype Chain
+# Question 13: Prototype Inheritance
+
+## Question
 
 ```js
-Animal.prototype.speak
+function Animal(name) {
+  this.name = name;
+}
+
+Animal.prototype.speak = function() {
+  return `${this.name} makes a noise.`;
+};
+
+const dog = new Animal('Rex');
+
+console.log(dog.speak());
+
+console.log(dog.hasOwnProperty('speak'));
 ```
 
-## Rule
+## Answer
 
-Objects first search:
+```js
+Rex makes a noise.
+false
+```
 
-1. Own properties
-2. Prototype
+## Explanation
 
-### Why False?
+When:
+
+```js
+dog.speak()
+```
+
+is called, JavaScript first searches inside `dog`.
+
+It does not find `speak`.
+
+Then it searches inside:
+
+```js
+Animal.prototype
+```
+
+and finds the method.
+
+---
+
+### hasOwnProperty()
+
+Checks only direct properties of the object.
 
 ```js
 dog.hasOwnProperty('speak')
 ```
 
-returns false because method exists in prototype.
+returns:
 
-### Interview Concept
+```js
+false
+```
 
-Prototype Inheritance
+because `speak` belongs to the prototype.
+
+### Concept Tested
+
+* Prototype Chain
+* Inheritance
+* hasOwnProperty()
 
 ---
 
 # Question 14: Async Function
 
-```js
-async function fetchData()
-```
-
-## Rule
-
-Always returns Promise.
+## Question
 
 ```js
-return 42
+async function fetchData() {
+  return 42;
+}
+
+fetchData().then(v => console.log(v));
+
+console.log('sync');
 ```
 
-becomes
+## Answer
 
 ```js
-Promise.resolve(42)
+sync
+42
 ```
 
-### Interview Concept
+## Explanation
 
-Async/Await
+Every async function automatically returns a Promise.
+
+```js
+return 42;
+```
+
+becomes:
+
+```js
+Promise.resolve(42);
+```
 
 ---
 
-# Question 15: flat and flatMap
+### Execution Order
+
+JavaScript executes synchronous code first.
 
 ```js
-flat()
+console.log('sync');
 ```
 
-removes one nesting level.
+prints immediately.
+
+Then Promise callbacks execute.
+
+```js
+42
+```
+
+prints later.
+
+### Concept Tested
+
+* Async Functions
+* Promises
+* Event Loop
+* Microtasks
 
 ---
 
-```js
-flatMap()
-```
+# Question 15: flat() and flatMap()
 
-performs
+## Question
 
 ```js
-map()
+const arr = [[1, 2], [3, 4], [5]];
+
+console.log(arr.flat());
+
+console.log(arr.flatMap(x => x.map(n => n * 2)));
 ```
 
-then
+## Answer
 
 ```js
-flat()
+[1, 2, 3, 4, 5]
+
+[2, 4, 6, 8, 10]
 ```
 
-### Interview Concept
+## Explanation
 
-Array Flattening
+### flat()
+
+Removes one level of nesting.
+
+```js
+[[1,2],[3,4],[5]]
+```
+
+becomes:
+
+```js
+[1,2,3,4,5]
+```
 
 ---
 
-# Question 16: Optional Chaining
+### flatMap()
+
+First performs map.
 
 ```js
-user.profile?.address?.city
+[
+ [2,4],
+ [6,8],
+ [10]
+]
 ```
 
-## Rule
-
-Stops evaluation if value is null or undefined.
-
-Prevents:
+Then automatically flattens.
 
 ```js
-Cannot read property of null
+[2,4,6,8,10]
 ```
 
-### Interview Concept
+### Concept Tested
 
-Safe property access
+* Array Flattening
+* flat()
+* flatMap()
+* Array Transformation
 
 ---
 
-# Question 17: Generator Function
+# Question 16: Optional Chaining and Nullish Coalescing
+
+## Question
 
 ```js
-function* gen()
+const user = {
+  profile: {
+    address: null
+  }
+};
+
+console.log(user.profile?.address?.city ?? 'Unknown');
+
+console.log(user.settings?.theme ?? 'default');
 ```
 
-## Rule
-
-yield pauses execution.
+## Answer
 
 ```js
-yield 1
+Unknown
+
+default
 ```
 
-pause
+## Explanation
+
+### Optional Chaining
 
 ```js
-yield 2
+?.
 ```
 
-pause
+safely accesses nested properties.
 
-### Interview Concept
+Without optional chaining:
 
-Iterators and Generators
+```js
+user.profile.address.city
+```
+
+would throw an error because:
+
+```js
+address === null
+```
 
 ---
 
-# Question 18: Symbol
+### Nullish Coalescing
+
+```js
+?? 'Unknown'
+```
+
+provides a fallback value when result is:
+
+```js
+null
+undefined
+```
+
+### Concept Tested
+
+* Optional Chaining
+* Nullish Coalescing
+* Safe Property Access
+
+---
+
+# Question 17: Generator Functions
+
+## Question
+
+```js
+function* gen() {
+  yield 1;
+
+  yield 2;
+
+  yield 3;
+}
+
+const g = gen();
+
+console.log(g.next().value);
+
+console.log(g.next().value);
+
+console.log(g.next().done);
+```
+
+## Answer
+
+```js
+1
+
+2
+
+false
+```
+
+## Explanation
+
+Generator functions pause execution at every `yield`.
+
+---
+
+### First Call
+
+```js
+g.next()
+```
+
+returns:
+
+```js
+{
+  value: 1,
+  done: false
+}
+```
+
+---
+
+### Second Call
+
+```js
+g.next()
+```
+
+returns:
+
+```js
+{
+  value: 2,
+  done: false
+}
+```
+
+---
+
+### Third Call
+
+```js
+g.next()
+```
+
+returns:
+
+```js
+{
+  value: 3,
+  done: false
+}
+```
+
+Therefore:
+
+```js
+g.next().done
+```
+
+is:
+
+```js
+false
+```
+
+### Concept Tested
+
+* Generators
+* Iterators
+* yield Keyword
+
+---
+
+# Question 18: Symbols
+
+## Question
+
+```js
+const sym1 = Symbol('foo');
+
+const sym2 = Symbol('foo');
+
+console.log(sym1 === sym2);
+
+console.log(typeof sym1);
+```
+
+## Answer
+
+```js
+false
+
+symbol
+```
+
+## Explanation
+
+Each Symbol is unique.
+
+Even if descriptions match:
 
 ```js
 Symbol('foo')
 ```
 
-## Rule
-
-Every Symbol is unique.
+and
 
 ```js
-Symbol('foo') !== Symbol('foo')
+Symbol('foo')
 ```
 
-### Interview Concept
+are different values.
 
-Unique object keys
+Therefore:
+
+```js
+sym1 === sym2
+```
+
+returns:
+
+```js
+false
+```
 
 ---
 
-# Question 19: Computed Properties
+### typeof Symbol
 
 ```js
-{
-  [key]: value
-}
+typeof sym1
 ```
 
-## Rule
-
-Expression inside [] becomes property name.
+returns:
 
 ```js
-key = 'name'
+symbol
 ```
 
-becomes
+### Concept Tested
 
-```js
-{
-  name:'Alice'
-}
-```
-
-### Interview Concept
-
-Dynamic Object Keys
+* Symbols
+* Primitive Data Types
+* Unique Keys
 
 ---
 
-# Question 20: Private Fields
+# Question 19: Computed Property Names
+
+## Question
+
+```js
+const key = 'name';
+
+const val = 'Alice';
+
+const obj = {
+  [key]: val,
+  age: 30
+};
+
+console.log(Object.keys(obj).length);
+
+console.log(obj[key]);
+```
+
+## Answer
+
+```js
+2
+
+Alice
+```
+
+## Explanation
+
+### Computed Property
+
+```js
+[key]
+```
+
+means:
+
+```js
+'name'
+```
+
+Therefore object becomes:
+
+```js
+{
+  name: 'Alice',
+  age: 30
+}
+```
+
+---
+
+### Object.keys()
+
+Returns:
+
+```js
+['name', 'age']
+```
+
+Length:
+
+```js
+2
+```
+
+---
+
+### Dynamic Access
+
+```js
+obj[key]
+```
+
+becomes:
+
+```js
+obj['name']
+```
+
+Result:
+
+```js
+Alice
+```
+
+### Concept Tested
+
+* Computed Properties
+* Dynamic Keys
+* Object.keys()
+
+---
+
+# Question 20: Private Class Fields
+
+## Question
+
+```js
+class Counter {
+  #count = 0;
+
+  increment() {
+    this.#count++;
+  }
+
+  get() {
+    return this.#count;
+  }
+}
+
+const c = new Counter();
+
+c.increment();
+
+c.increment();
+
+console.log(c.get());
+
+console.log('#count' in c);
+```
+
+## Answer
+
+```js
+2
+
+false
+```
+
+## Explanation
+
+### Private Fields
+
+Fields starting with:
 
 ```js
 #count
 ```
 
-## Rule
+are private.
 
-Private fields are accessible only inside class.
-
-```js
-this.#count
-```
-
-works
-
-```js
-c.#count
-```
-
-throws error
-
-### Interview Concept
-
-Class Encapsulation
+Only methods inside the class can access them.
 
 ---
 
-# Most Important Interview Rules
+### Increment Calls
 
-1. Hoisting
-2. Scope (var, let, const)
-3. Closure
-4. Event Loop
-5. this keyword
-6. Prototype Chain
-7. Promise & Async/Await
-8. Type Coercion
-9. Destructuring
-10. Spread & Rest
-11. Optional Chaining
-12. Nullish Coalescing
-13. Generator Functions
-14. Symbol
-15. Private Class Fields
-16. Short Circuit Evaluation
+Initial value:
+
+```js
+0
+```
+
+After first call:
+
+```js
+1
+```
+
+After second call:
+
+```js
+2
+```
+
+Therefore:
+
+```js
+c.get()
+```
+
+returns:
+
+```js
+2
+```
+
+---
+
+### in Operator
+
+```js
+'#count' in c
+```
+
+checks for a normal property named `#count`.
+
+Private fields are not normal object properties.
+
+Therefore:
+
+```js
+false
+```
+
+is returned.
+
+### Concept Tested
+
+* ES2022 Private Fields
+* Classes
+* Encapsulation
+* Object Properties
