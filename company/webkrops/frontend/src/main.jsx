@@ -9,8 +9,6 @@ import store from './store.js'
 import { AppRoute } from './AppRoute.jsx'
 createRoot(document.getElementById('root')).render(
   // <StrictMode>
-  <Provider store={store}>
-  <AppRoute />
-  </Provider>
+  <App/>
   // </StrictMode>,
 )

@@ -1,36 +1,45 @@
-import React from 'react'
-import { Route, Routes } from 'react-router-dom'
-import { lazy, Suspense } from 'react'
-import { UseAuth } from './context/AuthContext'
-import { useSelector } from 'react-redux'
-import PropsTesting from './components/PropsTesting'
-import { useCallback } from 'react'
-
-const Home = lazy(() => import('./components/Home'))
-const Child = lazy(() => import('./Child'))
+import React, { useEffect } from "react";
+import axios from "axios";
 
 const App = () => {
-  const { user, setUser } = UseAuth()
-  const userFromStore = useSelector(state => state.auth.user)
-  console.log(userFromStore)
-  const handelCLick = useCallback(() => { console.log("hey its clicked") }, [])
+  useEffect(() => {
+    const runAuthFlow = async () => {
+      try {
+        // 🔹 REGISTER
+        const registerRes = await axios.post(
+          "https://reqres.in/api/register",
+          {
+            email: "eve.holt@reqres.in",
+            password: "pistol",
+          }
+        );
 
-  return (
-    <div>
-      <h1 onClick={handelCLick}>this user is thi s{user}</h1>
-      <input type="enter" onChange={(e) => setUser(e.target.value)} />
-      <PropsTesting name={user} email={user} />
-      <PropsTesting name="welome" email="welcome" />
-      <Suspense fallback={<h1>hellow</h1>}>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/child' element={<Child />} />
-          <Route path="/call" element={<div>cal me</div>}/>
-        </Routes>
-      </Suspense>
+        console.log("REGISTER RESPONSE:", registerRes.data);
 
-    </div>
-  )
-}
+        // 🔹 LOGIN
+        const loginRes = await axios.post(
+          "https://reqres.in/api/login",
+          {
+            email: "eve.holt@reqres.in",
+            password: "pistol",
+          }
+        );
 
-export default App
+        console.log("LOGIN RESPONSE:", loginRes.data);
+
+        // 🔹 SAVE TOKEN
+        localStorage.setItem("token", loginRes.data.token);
+
+        console.log("TOKEN SAVED:", loginRes.data.token);
+      } catch (err) {
+        console.log("ERROR:", err.response?.data || err.message);
+      }
+    };
+
+    runAuthFlow();
+  }, []);
+
+  return <div>Check Console (Register → Login Flow)</div>;
+};
+
+export default App;
