@@ -550,3 +550,4 @@ Change Streams in MongoDB allow the application to **listen and react to real-ti
 ## **Final Interview Answer**
 
 Change Streams in MongoDB are used to listen to real-time changes in a collection or database. Using `.watch()`, the application can detect when data is inserted, updated, or deleted and respond immediately. It is mainly used in real-time applications like chat apps, notifications, and live dashboards.
+other quesiton have to finishied
