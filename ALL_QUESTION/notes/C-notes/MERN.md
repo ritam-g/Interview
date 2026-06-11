@@ -358,7 +358,7 @@ class Greeting extends React.Component {
 ### Q19. What is State in React? How do you use `useState`?
 
 **Answer:**
-State is **data that belongs to a component** and can change over time. When state changes, React re-renders the component.
+**State** is a built-in React feature used to store data that changes over time. You can think of it as a component's  **local memory** .
 
 ```jsx
 import { useState } from 'react';
@@ -571,7 +571,7 @@ Node.js is a **JavaScript runtime built on Chrome's V8 engine** — it lets you 
 ### Q28. What does "non-blocking" or "asynchronous" mean in Node.js?
 
 **Answer:**
-Node.js doesn't wait for one task to finish before starting the next. It starts a task, moves on, and comes back when the result is ready.
+"Node.js is  **non-blocking** . This means it does not wait for a slow task—like reading a file or fetching data—to finish. Instead, it starts the task, moves to the next line of code, and handles the result when it is ready
 
 ```javascript
 // Blocking (BAD in Node)
@@ -652,7 +652,7 @@ mongoose.connect(process.env.MONGO_URI);
 ### Q32. What is `async/await`? How is it different from callbacks?
 
 **Answer:**
-`async/await` is modern syntax to write **asynchronous code that looks synchronous** — easier to read and debug than callbacks or `.then()` chains.
+`async/await` is a clean way to write asynchronous code in JavaScript. It makes asynchronous code look and behave like synchronous code. We use `async` before a function to show it returns a Promise, and `await` inside the function to pause the code until that Promise finishes.
 
 ```javascript
 // Callback style (older, harder to read)
@@ -783,7 +783,7 @@ Would you like a quick interview question scenario to test how well you can spot
 ### Q37. What is destructuring in JavaScript?
 
 **Answer:**
-Destructuring lets you **unpack values from arrays or objects** into variables.
+Destructuring is a special syntax in JavaScript that lets us **unpack** values from arrays or properties from objects directly into distinct variables. It makes our code much shorter, cleaner, and easier to read because we don't have to repeat the object name over and over.
 
 ```javascript
 // Object destructuring
