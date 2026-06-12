@@ -53,7 +53,26 @@ const userSchema = new mongoose.Schema(
 userSchema.index({ email: 1 });
 
 const User = mongoose.model("User", userSchema);
+const TaskSchema = new mongoose({
+  Title: {
+    type: string,
+    required: true,
 
+  },
+  TaskTipe: {
+    enum: ["Hghh", "low"],
+    default: "low"
+  },
+  Owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
+  date: { type: Date }
+}, { timestamps: true })
+
+TaskSchema.index({ Title: 1 })
+
+const Task = mongoose.model("Task", TaskSchema)
 //zod
 const userZodSchema = z.object({
   name: z.string(),
