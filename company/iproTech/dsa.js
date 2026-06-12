@@ -66,4 +66,29 @@ function twoSum(arr, target) {
     }
 }
 
-console.log(twoSum([2, 7, 11, 15], 9)); // [0, 1]
+// console.log(twoSum([2, 7, 11, 15], 9)); // [0, 1]
+
+function mostFrequentElement(arr) {
+    const map = new Map()
+    let maxEle = -Infinity
+    let num;
+    for (let i = 0; i < arr.length; i++) {
+        // all element will store in map with ++ add one if prevous exiest ok 
+        let ele = arr[i]
+        map.set(ele, (map.get(ele) || 0) + 1)
+        if (map.get(ele) > maxEle) {
+            maxEle = map.get(ele)
+            num = ele
+        }
+    }
+    return { num, maxEle }
+}
+
+
+// console.log(mostFrequentElement([1, 2, 3, 4, 4, 3, 2, 3, 3]))
+
+function removeDublicate(arr) {
+    return [...new Set(arr)]
+}
+
+// console.log(removeDublicate([1, 2, 2, 3, 2, 4]))
