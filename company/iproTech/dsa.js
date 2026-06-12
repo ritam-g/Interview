@@ -92,3 +92,67 @@ function removeDublicate(arr) {
 }
 
 // console.log(removeDublicate([1, 2, 2, 3, 2, 4]))
+// const arr = [1, 2, 3, 4, 5, 6];
+
+// console.log(arr.filter(ele => ele % 2 == 0))
+const users = [
+    { name: "Ritam", age: 21 },
+    { name: "John", age: 25 },
+    { name: "rockey", age: 25 },
+];
+
+// console.log(users.map(({ name, age }) => name))
+// const arr = [1, 2, 3, 4, 5];
+
+// console.log(arr.reduce((acc, ele) => {
+//     return acc + ele
+// }))
+
+// console.log(users.find(({ age }) => age > 21))
+const arr = ["a", "b", "a", "c", "a"];
+
+
+const res = arr.reduce((acc, ele) => {
+    //if you are in acc then +1 other wise only one 
+    acc[ele] = (acc[ele] || 0) + 1
+    return acc
+}, {})
+
+// console.log(res)
+
+// console.log(users.reduce((acc, { name, age }) => {
+//     if (age >= 18) acc = { [name]: age }
+//     return acc
+// }, {}))
+// console.log(users.find(({ age }) => age >= 18))
+const names = ["ritam", "john"];
+
+// console.log(names.map(ele=>ele.toUpperCase()))
+const lar = [5, 10, 2, 20, 7];
+
+// console.log(lar.reduce((acc, ele) => {
+//     acc = acc < ele ? ele : acc
+//     return acc
+// }, lar[0]))
+const users2 = [
+    { name: "A", age: 25 },
+    { name: "B", age: 18 },
+    { name: "C", age: 30 }
+];
+
+// console.log(users2.sort((a, b) => b.age-a.age))
+const users3 = [
+    { name: "A", age: 15 },
+    { name: "B", age: 20 },
+    { name: "C", age: 25 }
+];
+
+
+console.log(users3.reduce(
+    (acc,{name,age})=>{
+        if(age>=18){
+            acc.push(name)
+        }
+        return acc
+    },[]
+))

@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
 import z from "zod";
+import AppError from "./src/errorMiddleware.js";
 
 const app = express();
 const PORT = 3000;
@@ -168,6 +169,21 @@ app.patch("/users/:id", async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
+// error middleware
+app.get('/test', async (req, res, next) => {
+  try {
+    throw new AppError("you hit test route ", 500)
+  } catch (error) {
+    console.log(error.message)
+    next(error)
+  }
+})
+app.use((err, req, res, next) => {
+  return res.status(err.statusCode).json({
+    err: err.message
+  })
+})
 /* ---------------- SERVER ---------------- */
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

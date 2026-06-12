@@ -1,5 +1,5 @@
 const promise = new Promise((res, rej) => {
-    let a = 1+1
+    let a = 1 + 1
     if (a == 2) {
         console.log('====================================');
         console.log('this is resolve format');
@@ -11,16 +11,17 @@ const promise = new Promise((res, rej) => {
 })
 
 
-promise
-    .then((msg) => {
-        console.log(msg);
-    })
-    .catch((err) => {
-        console.error(err);
-    });
+// promise
+//     .then((msg) => {
+//         console.log(msg);
+//     })
+//     .catch((err) => {
+//         console.error(err);
+//     });
 
 async function call(params) {
     const result = await promise
     console.log(result);
 }
-call()
+// call()
+
