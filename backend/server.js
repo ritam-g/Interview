@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
+import z from "zod";
 
 const app = express();
 const PORT = 3000;
@@ -41,7 +42,7 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    capped:{
+    capped: {
       size: 100000
     }
   }
@@ -52,16 +53,30 @@ userSchema.index({ email: 1 });
 
 const User = mongoose.model("User", userSchema);
 
+//zod
+const userZodSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  password: z.string().min(6),
+})
 /* ---------------- CHANGE STREAM (WATCH) ---------------- */
 const changeStream = User.watch()
 
 changeStream.on('change', (change) => {
-  console.log(`Change detected: `,change.operationType)
+  console.log(`Change detected: `, change.operationType)
 })
 
 /* ---------------- CREATE USER ---------------- */
 app.post("/users", async (req, res) => {
   try {
+    const { success } = userZodSchema.safeParse(req.body)
+
+    if (!success) {
+      return res.status.json({
+        success: false,
+        message: "please give right data"
+      })
+    }
     const user = await User.create(req.body);
     res.status(201).json(user);
   } catch (err) {
@@ -128,7 +143,31 @@ app.get("/users/stats", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+//put
+app.put("/users/:id", async (req, res) => {
+  const { id } = req.params
+  const user = User.findOneAndUpdate(id, req.body, { new: true })
+  return res.status(201).json({
+    user,
+    sucess: true
+  })
+});
 
+//patch
+app.patch("/users/:id", async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    )
+
+    res.status(201).json(user);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ error: err.message });
+  }
+});
 /* ---------------- SERVER ---------------- */
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
